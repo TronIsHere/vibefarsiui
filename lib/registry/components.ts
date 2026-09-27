@@ -201,11 +201,15 @@ import { formatToman } from "@/lib/utils"
   step={1_000_000}
   defaultValue={[20_000_000, 50_000_000]}
   format={formatToman}
+  fullRangeLabel="همه قیمت‌ها"
   onChange={([lo, hi]) => setRange([lo, hi])}
+  onCommit={([lo, hi]) => applyPriceFilter(lo, hi)}
 />`,
     props: [
       { name: "value / defaultValue", type: "[number, number]", desc: "زوج کف و سقف. دستگیره‌ها از هم رد نمی‌شن." },
-      { name: "onChange", type: "([min, max]) => void", desc: "بعد از هر جابه‌جایی یا کلید." },
+      { name: "onChange", type: "([min, max]) => void", desc: "حین درگ و با هر کلید صدا زده میشه، ولی فقط وقتی مقدار واقعاً عوض شده باشه. برای نمایش زنده مناسبه." },
+      { name: "onCommit", type: "([min, max]) => void", desc: "یک بار در پایان تعامل صدا زده میشه (رها کردن دستگیره یا ترک، یا هر کلید) و فقط اگر مقدار نسبت به شروع تعامل عوض شده باشه. جای درستِ درخواست به سرور یا اسکرول به نتایج همینه." },
+      { name: "fullRangeLabel", type: "ReactNode", desc: "وقتی بازه کل min تا max را پوشش میده، این متن به‌جای دو عدد نمایش داده میشه، مثلاً «همه قیمت‌ها»." },
       { name: "format", type: "(v: number) => string", default: "ارقام فارسی", desc: "قالب هر دو برچسب، مثلاً formatToman." },
       { name: "min / max / step", type: "number", desc: "بازه‌ی مجاز و گام." },
       { name: "minThumbLabel / maxThumbLabel", type: "string", default: "«کف» / «سقف»", desc: "aria-label هر دستگیره." },

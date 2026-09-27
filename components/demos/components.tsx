@@ -856,6 +856,7 @@ export const componentDemos: Record<string, React.ReactNode> = {
         step={1_000_000}
         defaultValue={[20_000_000, 50_000_000]}
         format={formatToman}
+        fullRangeLabel="همه قیمت‌ها"
       />
     </div>
   ),
