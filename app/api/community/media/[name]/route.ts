@@ -1,5 +1,6 @@
 import { isAdminSession } from "@/lib/analytics/auth";
 import { getSubmission, MEDIA_RE, readMedia } from "@/lib/community/store";
+import { COMMUNITY_ENABLED } from "@/lib/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -13,7 +14,7 @@ export async function GET(_request: Request, ctx: RouteContext<"/api/community/m
 
   const item = await getSubmission(name.split(".")[0]);
   if (!item || item.kind !== "showcase" || item.image !== name) return new Response(null, { status: 404 });
-  const approved = item.status === "approved";
+  const approved = COMMUNITY_ENABLED && item.status === "approved";
   if (!approved && !(await isAdminSession())) return new Response(null, { status: 404 });
 
   const bytes = await readMedia(name);

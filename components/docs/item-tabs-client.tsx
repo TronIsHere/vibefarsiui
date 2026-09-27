@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { CopyButton } from "@/components/shared/copy-button";
 import { themes } from "@/lib/registry/themes";
+import { useTheme } from "@/lib/theme-store";
 import { cn } from "@/lib/utils";
 import { componentDemos } from "@/components/demos/components";
 import {
@@ -193,7 +194,10 @@ export function ItemTabsClient({
     "preview",
   );
   const [k, setK] = React.useState(0);
-  const [scope, setScope] = React.useState("graphite");
+  // Follows the site theme until the reader picks one for this preview.
+  const { theme: siteTheme } = useTheme();
+  const [picked, setScope] = React.useState<string | null>(null);
+  const scope = picked ?? siteTheme;
   const [viewport, setViewport] = React.useState<Viewport>("desktop");
   const [file, setFile] = React.useState(0);
   const [page, setPage] = React.useState(0);

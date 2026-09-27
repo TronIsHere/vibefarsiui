@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { isAdminSession } from "@/lib/analytics/auth";
 import { clientIp } from "@/lib/analytics/store";
+import { COMMUNITY_ENABLED } from "@/lib/site";
 import {
   deleteSubmission,
   imageExt,
@@ -49,6 +50,7 @@ function httpUrl(raw: string): string | undefined {
 type Checked = { error: string } | { author: Author; title: string; description: string };
 
 async function common(form: FormData): Promise<Checked> {
+  if (!COMMUNITY_ENABLED) return { error: "ارسال فعلاً بسته است." };
   // Honeypot: real people never see this field.
   if (text(form, "company", 100)) return { error: "ارسال انجام نشد." };
 

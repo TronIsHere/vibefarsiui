@@ -12,8 +12,9 @@ export type Lang = "tsx" | "css" | "json" | "markdown" | "bash" | "text";
 /**
  * Graphite palette as hex — TextMate themes only accept hex. Values are the
  * design tokens in registry/themes/graphite.css plus the accents the old
- * regex highlighter used (fuchsia-300, sky-300); `fg` must match `code-well`
- * in app/globals.css.
+ * regex highlighter used (fuchsia-300, sky-300). Each hex only names a role:
+ * `highlight` swaps it for `var(--code-<role>)`, which `code-well` in
+ * app/globals.css defines for dark and light themes, so every hex must be unique.
  */
 const c = {
   fg: "#d7d7d9", // oklch(0.88 0.003 285), foreground nudged down for long reads
@@ -81,11 +82,21 @@ function getHighlighter() {
 
 export type Line = ThemedToken[];
 
-/** Tokenizes `code` with the graphite theme; one array per line. Tokens with the default color have no `color`. */
+// vscode-textmate upper-cases hex.
+const roles = new Map(Object.entries(c).map(([role, hex]) => [hex.toUpperCase(), role]));
+
+/**
+ * Tokenizes `code` with the graphite theme; one array per line. `color` is a
+ * `var(--code-<role>)` reference so the well can follow the page theme; tokens
+ * with the default color have none and inherit from `code-well`.
+ */
 export async function highlight(code: string, lang: Lang): Promise<Line[]> {
   const h = await getHighlighter();
   const { tokens } = h.codeToTokens(code, { lang, theme: "graphite" });
-  // vscode-textmate upper-cases hex; drop the default color so plain text inherits from `code-well`.
-  const fg = c.fg.toUpperCase();
-  return tokens.map((line) => line.map((t) => (t.color?.toUpperCase() === fg ? { ...t, color: undefined } : t)));
+  return tokens.map((line) =>
+    line.map((t) => {
+      const role = t.color && roles.get(t.color.toUpperCase());
+      return { ...t, color: role && role !== "fg" ? `var(--code-${role})` : undefined };
+    }),
+  );
 }

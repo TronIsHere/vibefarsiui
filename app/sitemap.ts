@@ -9,7 +9,7 @@ import {
   templates,
   themes,
 } from "@/lib/registry";
-import { absUrl } from "@/lib/site";
+import { absUrl, COMMUNITY_ENABLED } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
@@ -26,8 +26,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absUrl("/sites"), lastModified, changeFrequency: "weekly", priority: 0.8 },
     { url: absUrl("/themes"), lastModified, changeFrequency: "weekly", priority: 0.8 },
     { url: absUrl("/skills"), lastModified, changeFrequency: "weekly", priority: 0.8 },
-    { url: absUrl("/community"), lastModified, changeFrequency: "daily", priority: 0.7 },
-    { url: absUrl("/showcase"), lastModified, changeFrequency: "daily", priority: 0.7 },
+    ...(COMMUNITY_ENABLED
+      ? ([
+          { url: absUrl("/community"), lastModified, changeFrequency: "daily", priority: 0.7 },
+          { url: absUrl("/showcase"), lastModified, changeFrequency: "daily", priority: 0.7 },
+        ] as const)
+      : []),
     { url: absUrl("/icons"), lastModified, changeFrequency: "monthly", priority: 0.3 },
   ];
 
