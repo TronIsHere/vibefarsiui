@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn, fa } from "@/lib/utils";
+import { COMMUNITY_ENABLED } from "@/lib/site";
 import {
   animations,
   backgrounds,
@@ -207,20 +208,22 @@ export function DocsSidebar({ onNavigate }: { onNavigate?: () => void }) {
         {link("/docs#mcp", "سرور MCP", docsSection === "mcp")}
       </div>
 
-      <NavGroup
-        id="community"
-        open={!!openGroups.community}
-        onToggle={() => toggle("community")}
-        title="جامعه"
-        href="/community"
-        titleActive={pathname === "/community"}
-        onNavigate={onNavigate}
-      >
-        <li>{link("/community", "ساخته‌ی جامعه", pathname.startsWith("/community/") && pathname !== "/community/submit")}</li>
-        <li>{link("/showcase", "ساخته‌شده با وایب‌فارسی", pathname === "/showcase")}</li>
-        <li>{link("/community/submit", "فرستادن کامپوننت", pathname === "/community/submit")}</li>
-        <li>{link("/showcase/submit", "معرفی سایت", pathname === "/showcase/submit")}</li>
-      </NavGroup>
+      {COMMUNITY_ENABLED && (
+        <NavGroup
+          id="community"
+          open={!!openGroups.community}
+          onToggle={() => toggle("community")}
+          title="جامعه"
+          href="/community"
+          titleActive={pathname === "/community"}
+          onNavigate={onNavigate}
+        >
+          <li>{link("/community", "ساخته‌ی جامعه", pathname.startsWith("/community/") && pathname !== "/community/submit")}</li>
+          <li>{link("/showcase", "ساخته‌شده با وایب‌فارسی", pathname === "/showcase")}</li>
+          <li>{link("/community/submit", "فرستادن کامپوننت", pathname === "/community/submit")}</li>
+          <li>{link("/showcase/submit", "معرفی سایت", pathname === "/showcase/submit")}</li>
+        </NavGroup>
+      )}
 
       {sections.map((s) => (
         <NavGroup

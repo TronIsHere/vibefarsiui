@@ -1,3 +1,5 @@
+import { COMMUNITY_ENABLED } from "@/lib/site";
+
 export type NavLink = { href: string; label: string; desc?: string };
 export type NavGroup = { label: string; items: readonly NavLink[] };
 export type NavEntry = NavLink | NavGroup;
@@ -17,7 +19,7 @@ export const navLinks: readonly NavEntry[] = [
   { label: "کتابخانه", items: libraryLinks },
   { href: "/themes", label: "سیستم‌های طراحی" },
   { href: "/skills", label: "مهارت‌ها" },
-  { href: "/community", label: "جامعه" },
+  ...(COMMUNITY_ENABLED ? [{ href: "/community", label: "جامعه" }] : []),
 ];
 
 export const isGroup = (e: NavEntry): e is NavGroup => "items" in e;
