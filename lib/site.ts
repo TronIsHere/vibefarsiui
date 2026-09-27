@@ -9,6 +9,9 @@ export const X_URL = "https://x.com/Erwinamm";
 export const SPONSOR_URL = X_URL;
 export const NPM_URL = "https://www.npmjs.com/package/vibefarsi";
 
+/** Public community pages (/community, /showcase, submissions). Off for now; the admin queue at /vf/community still works. */
+export const COMMUNITY_ENABLED = false;
+
 export const SITE_TITLE = "کامپوننت‌های فارسی راست‌چین برای React · وایب‌فارسی";
 export const SITE_DESCRIPTION =
   "کامپوننت‌های راست‌چین رایگان برای Next.js و React. فایل را کپی کنید یا پرامپت انگلیسی را به Cursor بدهید. فونت و اعداد فارسی داخل خود کامپوننت است.";

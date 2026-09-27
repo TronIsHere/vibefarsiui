@@ -292,13 +292,36 @@
   }
 }
 
-/* Code blocks stay graphite in every design system (a dark well on paper);
-   Shiki token colors in lib/highlight.ts are tuned for this surface and its
-   `fg` must equal this color. */
+/* Code blocks: a well one step off the page background, tinted by the active
+   theme; syntax hues switch between a dark and a light set. lib/highlight.ts
+   colors tokens with these --code-* roles. */
 @utility code-well {
   color-scheme: dark;
-  background: oklch(0.14 0.002 285);
-  color: #d7d7d9;
+  background: color-mix(in oklch, var(--foreground) 3%, var(--background));
+  color: var(--code-fg);
+  --code-fg: color-mix(in oklch, var(--foreground) 88%, var(--background));
+  --code-muted: var(--muted-foreground);
+  --code-brand: #ffa430;
+  --code-success: #2acc8a;
+  --code-warning: #fab72a;
+  --code-keyword: #f4a8ff;
+  --code-attr: #74d4ff;
+  --code-type: #82e1e0;
+  --code-fn: #c3b9ff;
+
+  :where([data-theme="paper"], [data-theme="saffron"], [data-theme="pomegranate"]) & {
+    color-scheme: light;
+    background: color-mix(in oklch, var(--foreground) 3.5%, var(--card));
+    --code-fg: color-mix(in oklch, var(--foreground) 90%, var(--background));
+    --code-muted: var(--muted-foreground);
+    --code-brand: oklch(0.52 0.15 45);
+    --code-success: oklch(0.5 0.13 155);
+    --code-warning: oklch(0.55 0.14 65);
+    --code-keyword: oklch(0.5 0.2 330);
+    --code-attr: oklch(0.5 0.14 240);
+    --code-type: oklch(0.5 0.1 195);
+    --code-fn: oklch(0.48 0.17 290);
+  }
 }
 
 /* Mask utilities for fades. */
@@ -902,4 +925,15 @@
 }
 @keyframes banner-in {
   from { opacity: 0; filter: blur(2px); transform: translateY(16px) scale(0.96); }
+}
+
+/* Landing hero: live components fly out from the headline, then drift. */
+@keyframes hero-fly {
+  from { opacity: 0; transform: translate(var(--fx, 0), var(--fy, 0)) scale(0.5); filter: blur(12px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes hero-drift {
+  0%, 100% { transform: translate(0, 0) rotate(var(--tilt, 0deg)); }
+  33% { transform: translate(5px, -11px) rotate(calc(var(--tilt, 0deg) + 1deg)); }
+  66% { transform: translate(-6px, 5px) rotate(calc(var(--tilt, 0deg) - 1deg)); }
 }
