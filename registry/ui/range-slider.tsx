@@ -9,6 +9,12 @@ export interface RangeSliderProps {
   value?: RangeValue;
   defaultValue?: RangeValue;
   onChange?: (value: RangeValue) => void;
+  /**
+   * Fires once when an interaction ends (thumb or track released, or a key
+   * press) and only if the value actually changed. Use it for fetches or
+   * scroll-to-results; use onChange for the live preview.
+   */
+  onCommit?: (value: RangeValue) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -16,6 +22,8 @@ export interface RangeSliderProps {
   format?: (value: number) => string;
   label?: React.ReactNode;
   showValue?: boolean;
+  /** Shown instead of the two values while the range covers [min, max], e.g. «همه قیمت‌ها». */
+  fullRangeLabel?: React.ReactNode;
   disabled?: boolean;
   className?: string;
   /** Accessible name for the lower (کف) thumb. */
@@ -50,12 +58,14 @@ export function RangeSlider({
   value,
   defaultValue = [0, 100],
   onChange,
+  onCommit,
   min = 0,
   max = 100,
   step = 1,
   format = (v) => fa(v),
   label,
   showValue = true,
+  fullRangeLabel,
   disabled,
   className,
   minThumbLabel = "کف",
@@ -68,6 +78,8 @@ export function RangeSlider({
   const hiRef = React.useRef(hi);
   const trackRef = React.useRef<HTMLDivElement>(null);
   const activeThumb = React.useRef<Thumb | null>(null);
+  // Value when the current interaction began; null when none is in progress.
+  const startValue = React.useRef<RangeValue | null>(null);
   const [dragging, setDragging] = React.useState<Thumb | null>(null);
   const labelId = React.useId();
 
@@ -81,10 +93,27 @@ export function RangeSlider({
 
   function commit(next: RangeValue) {
     const ordered: RangeValue = next[0] <= next[1] ? next : [next[1], next[0]];
+    // Most pointer moves snap to the same step; don't re-render or notify.
+    if (ordered[0] === loRef.current && ordered[1] === hiRef.current) return;
     loRef.current = ordered[0];
     hiRef.current = ordered[1];
     if (!controlled) setInternal(ordered);
     onChange?.(ordered);
+  }
+
+  function beginInteraction() {
+    startValue.current = [loRef.current, hiRef.current];
+  }
+
+  // Thumb pointerup bubbles to the track too; the null guard makes the
+  // second call a no-op so onCommit fires once per interaction.
+  function endInteraction() {
+    const start = startValue.current;
+    if (!start) return;
+    startValue.current = null;
+    if (start[0] !== loRef.current || start[1] !== hiRef.current) {
+      onCommit?.([loRef.current, hiRef.current]);
+    }
   }
 
   function setThumb(thumb: Thumb, raw: number) {
@@ -126,6 +155,7 @@ export function RangeSlider({
     const thumb = nearestThumb(v);
     activeThumb.current = thumb;
     setDragging(thumb);
+    beginInteraction();
     setThumb(thumb, v);
     e.currentTarget.setPointerCapture(e.pointerId);
   }
@@ -142,6 +172,7 @@ export function RangeSlider({
     }
     activeThumb.current = null;
     setDragging(null);
+    endInteraction();
   }
 
   function handleKey(thumb: Thumb, e: React.KeyboardEvent<HTMLButtonElement>) {
@@ -181,7 +212,9 @@ export function RangeSlider({
         return;
     }
     e.preventDefault();
+    beginInteraction();
     setThumb(thumb, next);
+    endInteraction();
   }
 
   function startThumbDrag(thumb: Thumb, e: React.PointerEvent<HTMLButtonElement>) {
@@ -189,6 +222,7 @@ export function RangeSlider({
     e.stopPropagation();
     activeThumb.current = thumb;
     setDragging(thumb);
+    beginInteraction();
     e.currentTarget.setPointerCapture(e.pointerId);
   }
 
@@ -204,6 +238,7 @@ export function RangeSlider({
     }
     activeThumb.current = null;
     setDragging(null);
+    endInteraction();
   }
 
   const thumbClass = cn(
@@ -218,27 +253,35 @@ export function RangeSlider({
     "transition-[box-shadow,transform] duration-150 motion-reduce:transition-none",
   );
 
+  const fullRange = fullRangeLabel != null && lo <= min && hi >= max;
+
   return (
-    <div className={cn("space-y-2", className)}>
+    // overflow-x-clip: the 44px hit areas reach past the track ends; clipping
+    // them keeps a padded, scrollable parent (e.g. Sheet) from scrolling sideways.
+    <div className={cn("space-y-2 overflow-x-clip", className)}>
       {(label || showValue) && (
-        <div className="flex items-center justify-between gap-3 text-xs">
-          {label ? (
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs">
+          {label && (
             <span id={labelId} className="text-muted-foreground">
               {label}
             </span>
-          ) : (
-            <span />
           )}
           {showValue && (
             <span
-              className="flex shrink-0 items-center gap-1.5 font-medium tabular-nums"
+              className="ms-auto flex flex-wrap items-center gap-x-1.5 font-medium tabular-nums"
               aria-live="polite"
             >
-              <span>{format(lo)}</span>
-              <span className="font-normal text-muted-foreground" aria-hidden>
-                تا
-              </span>
-              <span>{format(hi)}</span>
+              {fullRange ? (
+                fullRangeLabel
+              ) : (
+                <>
+                  <span className="whitespace-nowrap">{format(lo)}</span>
+                  <span className="font-normal text-muted-foreground" aria-hidden>
+                    تا
+                  </span>
+                  <span className="whitespace-nowrap">{format(hi)}</span>
+                </>
+              )}
             </span>
           )}
         </div>
@@ -254,7 +297,8 @@ export function RangeSlider({
         onPointerUp={onPointerUpTrack}
         onPointerCancel={onPointerUpTrack}
         className={cn(
-          "relative flex h-11 w-full items-center select-none",
+          // mx-2 = half the visible knob, so the knob sits inside at min/max.
+          "relative mx-2 flex h-11 items-center select-none",
           disabled && "pointer-events-none opacity-50",
         )}
       >
