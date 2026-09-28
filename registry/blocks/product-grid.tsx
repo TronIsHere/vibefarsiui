@@ -1,8 +1,8 @@
 import { ShoppingCart } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Price } from "@/components/ui/price";
-import { Rating } from "@/components/ui/rating";
+import { Badge } from "@/registry/ui/badge";
+import { Button } from "@/registry/ui/button";
+import { Price } from "@/registry/ui/price";
+import { Rating } from "@/registry/ui/rating";
 import { fa } from "@/lib/utils";
 
 export interface Product {
