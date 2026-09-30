@@ -93,7 +93,7 @@ const cities = ["اصفهان", "اهواز", "اراک", "اردبیل", "ته�
       { name: "value / onChange", type: "string / (v) => void", desc: "کنترل‌شده یا آزاد." },
       { name: "emptyText", type: "string", default: '"چیزی پیدا نشد"', desc: "متن حالت خالی." },
     ],
-    promptBullets: ["Two-stage filter: options that start with the query first, then those that contain it.", "Highlight the matched span of each option (font-semibold).", "Up/down, Enter, Escape; role=combobox and aria-expanded."],
+    promptBullets: ["Two-stage filter: options that start with the query first, then those that contain it.", "Highlight the matched span of each option (font-semibold).", "Up/down, Enter, Escape; role=combobox and aria-expanded.", "Keep the keyboard-active option scrolled into view (scrollIntoView block nearest)."],
   },
   {
     slug: "otp-field", name: "کد تأیید", cat: "form", file: ui("otp-field"),
@@ -744,7 +744,7 @@ const week = jalaliWeekLabels() // ["ش","ی","د","س","چ","پ","ج"] ending t
   onChange={setCity}
 />`,
     props: [{ name: "loadOptions", type: "(q, signal) => Promise<Option[]>", desc: "با signal درخواست قدیمی را لغو کنید." }, { name: "debounce / minChars", type: "number", default: "250 / 1", desc: "تأخیر و حداقل حروف." }],
-    promptBullets: ["AbortController per search; ignore responses from aborted requests.", "Three list states: «در حال جست‌وجو…», «چیزی پیدا نشد», «خطا در دریافت»; spinner at the end of the field.", "Highlight the matched span; use ZWJ so Persian letter joining does not break."],
+    promptBullets: ["AbortController per search; ignore responses from aborted requests.", "Three list states: «در حال جست‌وجو…», «چیزی پیدا نشد», «خطا در دریافت»; spinner at the end of the field.", "Highlight the matched span; use ZWJ so Persian letter joining does not break.", "Keep the keyboard-active option scrolled into view (scrollIntoView block nearest)."],
   },
   {
     slug: "password-input", name: "رمز عبور", cat: "form", file: ui("password-input"), deps: ["lucide-react"],

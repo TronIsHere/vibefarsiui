@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { fontVariables } from "./fonts";
 import { JsonLd } from "@/components/shared/json-ld";
 import { THEME_STORAGE_KEY } from "@/lib/registry";
+import Script from "next/script";
 import {
   OG_IMAGE,
   SITE_DESCRIPTION,
@@ -98,6 +99,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full w-full max-w-full flex-col bg-background font-sans text-foreground">
         <JsonLd data={siteJsonLd()} />
         {children}
+        <Script
+          src="https://didbanam.neda1.paasta.app/js/script.js"
+          data-site="82mhz2ku62"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

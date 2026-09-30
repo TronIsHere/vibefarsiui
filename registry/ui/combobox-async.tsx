@@ -29,6 +29,7 @@ export function ComboboxAsync({ loadOptions, value = null, onChange, placeholder
   const [index, setIndex] = React.useState(0);
   const listId = React.useId();
   const root = React.useRef<HTMLDivElement>(null);
+  const listRef = React.useRef<HTMLUListElement>(null);
   const listOpen = open && q.trim().length >= minChars;
   const { mounted, style, theme, panel } = useFloat(listOpen, root, { matchWidth: true, gap: 4 });
 
@@ -48,6 +49,12 @@ export function ComboboxAsync({ loadOptions, value = null, onChange, placeholder
   }, [q, open, minChars, debounce, loadOptions]);
 
   function pick(o: AsyncOption) { setQ(o.label); onChange?.(o); setOpen(false); }
+
+  // Keep the keyboard-active option in view (scrolls only when needed).
+  React.useEffect(() => {
+    if (!listOpen) return;
+    listRef.current?.querySelector(`[data-index="${index}"]`)?.scrollIntoView({ block: "nearest" });
+  }, [listOpen, index]);
 
   return (
     <div ref={root} className={cn("relative", className)}>
@@ -73,7 +80,7 @@ export function ComboboxAsync({ loadOptions, value = null, onChange, placeholder
         {state === "loading" ? <Loader2 className="size-4 animate-spin text-muted-foreground" /> : <ChevronDown className={cn("size-4 text-muted-foreground transition-transform", open && "rotate-180")} />}
       </div>
       <FloatPortal open={listOpen} mounted={mounted} style={style} theme={theme} panelRef={panel} className="fixed z-50">
-        <ul id={listId} role="listbox" className="max-h-60 overflow-auto rounded-lg border border-border bg-popover p-1.5 text-sm/8 shadow-lg">
+        <ul id={listId} ref={listRef} role="listbox" className="max-h-60 overflow-auto rounded-lg border border-border bg-popover p-1.5 text-sm/8 shadow-lg">
           {state === "error" && <li className="px-2.5 py-2 text-destructive">{errorText}</li>}
           {state === "loading" && items.length === 0 && <li className="px-2.5 py-2 text-muted-foreground">در حال جست‌وجو…</li>}
           {state === "idle" && items.length === 0 && <li className="px-2.5 py-2 text-muted-foreground">{emptyText}</li>}
@@ -81,6 +88,7 @@ export function ComboboxAsync({ loadOptions, value = null, onChange, placeholder
             <li
               key={o.value}
               role="option"
+              data-index={i}
               aria-selected={o.value === value?.value}
               onMouseDown={(e) => { e.preventDefault(); pick(o); }}
               onMouseEnter={() => setIndex(i)}
