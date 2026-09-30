@@ -24,7 +24,9 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   keywords: [
     "وایب‌فارسی",
+    "وایب فارسی",
     "VibeFarsi",
+    "Vibe Farsi",
     "کامپوننت فارسی",
     "راست‌چین",
     "RTL",
@@ -66,6 +68,15 @@ export const metadata: Metadata = {
       "max-snippet": -1,
       "max-video-preview": -1,
     },
+  },
+  // Search Console / Bing Webmaster tokens, set at build time (DNS verification needs neither).
+  verification: {
+    ...(process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.BING_SITE_VERIFICATION
+      ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } }
+      : {}),
   },
   category: "technology",
   manifest: "/icons/site.webmanifest",

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps<"/skills/[slug]">):
   const item = skills.find((s) => s.slug === slug);
   if (!item) return pageMetadata({ title: "یافت نشد", path: `/skills/${slug}`, index: false });
   return pageMetadata({
-    title: `${item.name} · مهارت فارسی برای Claude Code و Cursor · وایب‌فارسی`,
+    title: `${item.name} · مهارت Claude Code و Cursor · وایب‌فارسی`,
     description: item.desc,
     path: `/skills/${slug}`,
   });

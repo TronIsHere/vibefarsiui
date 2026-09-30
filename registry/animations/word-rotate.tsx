@@ -15,9 +15,12 @@ export function WordRotate({ words, interval = 2200, className }: { words: strin
     // No overflow on the outer span: overflow ≠ visible makes inline-block
     // baseline the box bottom, which drops the slot below the rest of the line.
     <span className={cn("relative inline-block align-baseline", className)} aria-live="polite">
-      <span aria-hidden className="invisible whitespace-nowrap">
-        {longest}
-      </span>
+      {/* Sizer text lives in ::before so crawlers don't read the longest word twice. */}
+      <span
+        aria-hidden
+        data-text={longest}
+        className="invisible whitespace-nowrap before:content-[attr(data-text)]"
+      />
       <span className="absolute inset-0 overflow-hidden">
         <span
           key={i}

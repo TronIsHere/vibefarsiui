@@ -14,11 +14,11 @@
   },
   "homepage": "https://vibefarsi.ir",
   "bugs": {
-    "url": "https://github.com/TronIsHere/vibafarsiui/issues"
+    "url": "https://github.com/TronIsHere/vibefarsiui/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TronIsHere/vibafarsiui.git",
+    "url": "git+https://github.com/TronIsHere/vibefarsiui.git",
     "directory": "packages/cli"
   },
   "publishConfig": {

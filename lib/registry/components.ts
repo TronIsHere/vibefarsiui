@@ -719,7 +719,7 @@ const week = jalaliWeekLabels() // ["ش","ی","د","س","چ","پ","ج"] ending t
     promptBullets: ["Open/close timers with delay so a fast mouse pass does not open it; open immediately on focus.", "Portal into document.body with position:fixed so overflow:hidden ancestors cannot clip it; keep the close delay so the pointer can reach the card."],
   },
   {
-    slug: "carousel", name: "اسلایدر", cat: "display", file: ui("carousel"), wide: true, deps: ["lucide-react"],
+    slug: "carousel", name: "اسلایدر تصویر", cat: "display", file: ui("carousel"), wide: true, deps: ["lucide-react"],
     desc: "اسلایدر با اسکرول‌اسنپ بومی و راست‌چین واقعی، که اولین اسلاید سمت راسته و «بعدی» به چپ میره.",
     usage: `import { Carousel } from "@/components/ui/carousel"
 
