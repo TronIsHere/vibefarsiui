@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { fontVariables } from "./fonts";
 import { JsonLd } from "@/components/shared/json-ld";
 import { THEME_STORAGE_KEY } from "@/lib/registry";
+import Script from "next/script";
 import {
   OG_IMAGE,
   SITE_DESCRIPTION,
