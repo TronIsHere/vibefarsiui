@@ -24,6 +24,7 @@ export function Combobox({ options, value = "", onChange, placeholder = "جست�
   const [index, setIndex] = React.useState(0);
   const listId = React.useId();
   const root = React.useRef<HTMLDivElement>(null);
+  const listRef = React.useRef<HTMLUListElement>(null);
   const { mounted, style, theme, panel } = useFloat(open, root, { matchWidth: true, gap: 4 });
 
   const q = query.trim();
@@ -33,6 +34,12 @@ export function Combobox({ options, value = "", onChange, placeholder = "جست�
     const contains = options.filter((o) => !o.startsWith(q) && o.includes(q));
     return [...starts, ...contains];
   }, [options, q]);
+
+  // Keep the keyboard-active option in view (scrolls only when needed).
+  React.useEffect(() => {
+    if (!open) return;
+    listRef.current?.querySelector(`[data-index="${index}"]`)?.scrollIntoView({ block: "nearest" });
+  }, [open, index]);
 
   function pick(v: string) {
     setQuery(v);
@@ -68,12 +75,13 @@ export function Combobox({ options, value = "", onChange, placeholder = "جست�
         <ChevronDown className={cn("size-4 text-muted-foreground transition-transform", open && "rotate-180")} />
       </div>
       <FloatPortal open={open} mounted={mounted} style={style} theme={theme} panelRef={panel} className="fixed z-50">
-        <ul id={listId} role="listbox" className="max-h-56 overflow-auto rounded-lg border border-border bg-popover p-1 text-sm leading-7 shadow-lg">
+        <ul id={listId} ref={listRef} role="listbox" className="max-h-56 overflow-auto rounded-lg border border-border bg-popover p-1 text-sm leading-7 shadow-lg">
           {filtered.length === 0 && <li className="px-2.5 py-2 text-muted-foreground">{emptyText}</li>}
           {filtered.map((o, i) => (
             <li
               key={o}
               role="option"
+              data-index={i}
               aria-selected={o === value}
               onMouseDown={(e) => { e.preventDefault(); pick(o); }}
               onMouseEnter={() => setIndex(i)}
