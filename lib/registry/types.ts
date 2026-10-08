@@ -28,6 +28,9 @@ export type BackgroundDoc = DocBase & {
   /** Rendered with WebGL through the `shader` primitive instead of CSS. */
   engine?: "webgl";
 };
+/** What the chart answers: change over time, comparison, part of a whole, spread, flow, money, or the shared kit. */
+export type ChartCat = "kit" | "trend" | "compare" | "part" | "distribution" | "flow" | "finance";
+export type ChartDoc = DocBase & { cat: ChartCat; tags: string[] };
 export type TemplateDoc = DocBase & { tags: string[]; pages: number };
 export type BlockDoc = DocBase & { tags: string[] };
 /** How a design system looks beyond its palette. Short Persian phrases. */

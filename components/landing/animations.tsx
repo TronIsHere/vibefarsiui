@@ -7,6 +7,7 @@ import { animations } from "@/lib/registry";
 import { animationDemos, replayable } from "@/components/demos/animations";
 import { Section } from "./frame";
 import { ItemCard, SectionFoot, SectionHead } from "./section-head";
+import { fillGrid } from "@/lib/grid-fill";
 
 function AnimationCard({ slug, name, desc }: { slug: string; name: string; desc: string }) {
   const [k, setK] = useState(0);
@@ -37,10 +38,11 @@ export function Animations({ standalone }: { standalone?: boolean }) {
       standalone={standalone}
     />
   );
+  const spans = fillGrid(animations.map((a) => (a.wide ? 2 : 1)), standalone ? { base: 1, sm: 2, xl: 3 } : { base: 1, sm: 2, xl: 4 });
   const grid = (
     <ul className={cn("grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4", standalone ? "xl:grid-cols-3" : "p-3 sm:p-4 xl:grid-cols-4")}>
-      {animations.map((a) => (
-        <li key={a.slug} className={cn(a.wide && "sm:col-span-2")}><AnimationCard {...a} /></li>
+      {animations.map((a, i) => (
+        <li key={a.slug} className={spans[i]}><AnimationCard {...a} /></li>
       ))}
     </ul>
   );

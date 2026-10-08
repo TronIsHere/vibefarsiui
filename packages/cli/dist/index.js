@@ -3,14 +3,14 @@ import { parseArgs } from "./args.js";
 import { runAdd, runList } from "./add.js";
 import { runInit } from "./init.js";
 import { color, fail, hint } from "./log.js";
-const VERSION = "0.1.1";
+const VERSION = "2.0.0";
 const HELP = `
-${color.bold("vibefarsi")}  Persian RTL components for React + Tailwind
+${color.bold("vibefarsi")} v2  Persian RTL components for React + Tailwind
 
 Usage
   npx vibefarsi@latest init
   npx vibefarsi add button calendar price
-  npx vibefarsi list [components|blocks|animations|backgrounds|templates|themes|skills|lib]
+  npx vibefarsi list [components|charts|blocks|animations|backgrounds|templates|themes|skills|lib]
 
 Commands
   init     dir="rtl", Vazirmatn/IRANSans, Graphite tokens, lib/utils.ts, lib/jalali.ts,

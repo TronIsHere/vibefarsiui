@@ -4,6 +4,7 @@ import {
   AppWindow,
   ArrowLeft,
   Boxes,
+  ChartLine,
   Image,
   LayoutTemplate,
   Palette,
@@ -20,6 +21,7 @@ import { cn, fa } from "@/lib/utils";
 const ICONS: Record<SectionKey, LucideIcon> = {
   components: Boxes,
   blocks: PanelsTopLeft,
+  charts: ChartLine,
   animations: Sparkles,
   backgrounds: Image,
   templates: LayoutTemplate,

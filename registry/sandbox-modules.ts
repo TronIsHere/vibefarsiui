@@ -6,5 +6,6 @@ export const registryModules: Record<string, () => Promise<unknown>> = {
   ...import.meta.glob("./ui/*.tsx"),
   ...import.meta.glob("./animations/*.tsx"),
   ...import.meta.glob("./backgrounds/*.tsx"),
+  ...import.meta.glob("./charts/*.tsx"),
   ...import.meta.glob("./blocks/*.tsx"),
 };

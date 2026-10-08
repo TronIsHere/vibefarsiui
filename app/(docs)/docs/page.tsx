@@ -163,6 +163,7 @@ const INIT_WRITES: React.ReactNode[] = [
 const ADD_TARGETS: [string, string][] = [
   ["کامپوننت", "components/ui/"],
   ["بلاک", "components/blocks/"],
+  ["نمودار", "components/charts/"],
   ["انیمیشن", "components/animations/"],
   ["پس‌زمینه", "components/backgrounds/"],
   ["قالب", "components/templates/"],

@@ -89,6 +89,8 @@ import { PhoneInput } from "@/registry/ui/phone-input";
 import { NationalIdInput } from "@/registry/ui/national-id-input";
 import { CardNumberInput } from "@/registry/ui/card-number-input";
 import { PlateInput } from "@/registry/ui/plate-input";
+import { AddressPicker, type AddressValue } from "@/registry/ui/address-picker";
+import { PostalCodeInput } from "@/registry/ui/postal-code-input";
 import { DateRangePicker, RangeCalendar, type DateRange } from "@/registry/ui/date-range-picker";
 import { TimePicker } from "@/registry/ui/time-picker";
 import { AmountInput } from "@/registry/ui/amount-input";
@@ -687,6 +689,34 @@ function SpinnerDemo() {
   );
 }
 
+function AddressDemo() {
+  const [addr, setAddr] = React.useState<AddressValue>({ province: "اصفهان", city: "" });
+  const [postal, setPostal] = React.useState("");
+  const [tried, setTried] = React.useState(false);
+  const [sent, setSent] = React.useState(false);
+  const complete = !!addr.city && postal.length === 10;
+  return (
+    <form
+      className="w-full max-w-md space-y-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setTried(true);
+        setSent(complete);
+      }}
+    >
+      <AddressPicker value={addr} onChange={(v) => { setAddr(v); setSent(false); }} invalid={tried} id="d-addr" />
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="d-postal" className="text-sm font-medium text-foreground/90">کد پستی</label>
+        <PostalCodeInput id="d-postal" value={postal} onChange={(d) => { setPostal(d); setSent(false); }} invalid={tried} />
+      </div>
+      <div className="flex items-center gap-3">
+        <Button type="submit" size="sm">ثبت آدرس</Button>
+        {sent && <span className="text-xs text-muted-foreground" aria-live="polite">{addr.province}، {addr.city}</span>}
+      </div>
+    </form>
+  );
+}
+
 export const componentDemos: Record<string, React.ReactNode> = {
   button: (
     <div className="flex flex-col items-center gap-3">
@@ -1208,6 +1238,12 @@ export const componentDemos: Record<string, React.ReactNode> = {
     </div>
   ),
   "plate-input": <PlateInput defaultValue={{ left: "12", letter: "ب", middle: "345", region: "11" }} />,
+  "address-picker": <AddressDemo />,
+  "postal-code-input": (
+    <div className="w-full max-w-xs">
+      <PostalCodeInput id="d-postal-only" defaultValue="8163847351" />
+    </div>
+  ),
   "date-range-picker": <RangeDemo />,
   "time-picker": (
     <div className="w-full max-w-[200px]">
@@ -1677,6 +1713,16 @@ export const componentCardDemos: Record<string, React.ReactNode> = {
   "card-number-input": (
     <div className="w-full">
       <CardNumberInput />
+    </div>
+  ),
+  "address-picker": (
+    <div className="w-full">
+      <AddressPicker layout="stack" defaultValue={{ province: "فارس", city: "شیراز" }} />
+    </div>
+  ),
+  "postal-code-input": (
+    <div className="w-full">
+      <PostalCodeInput defaultValue="7134845761" />
     </div>
   ),
   "date-range-picker": (

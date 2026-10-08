@@ -24,6 +24,7 @@ import { SKILL_FORMAT_LABEL, skills, type SkillDoc, type SkillIcon } from "@/lib
 import { cn, fa } from "@/lib/utils";
 import { Section } from "./frame";
 import { SectionFoot, SectionHead } from "./section-head";
+import { fillGrid } from "@/lib/grid-fill";
 
 export const SKILL_ICONS: Record<SkillIcon, LucideIcon> = {
   chat: MessageCircle,
@@ -129,10 +130,11 @@ export function Skills({ standalone }: { standalone?: boolean }) {
       standalone={standalone}
     />
   );
+  const spans = fillGrid(skills.map(() => 1), { base: 1, sm: 2, xl: 3 });
   const grid = (
     <ul className={cn("grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4", standalone ? "xl:grid-cols-3" : "p-3 sm:p-4 xl:grid-cols-3")}>
-      {skills.map((s) => (
-        <li key={s.slug}>
+      {skills.map((s, i) => (
+        <li key={s.slug} className={spans[i]}>
           <SkillCard s={s} />
         </li>
       ))}

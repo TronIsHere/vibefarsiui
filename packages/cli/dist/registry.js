@@ -52,7 +52,7 @@ export async function fetchCatalog(client) {
 export async function fetchItem(client, item) {
     return getJson(client.itemUrl(item.url));
 }
-const TYPE_RANK = ["lib", "component", "block", "animation", "background", "template", "site", "theme", "skill"];
+const TYPE_RANK = ["lib", "component", "chart", "block", "animation", "background", "template", "site", "theme", "skill"];
 export function resolveItems(catalog, queries) {
     const found = [];
     const missing = [];
@@ -69,7 +69,7 @@ export function resolveOne(catalog, query) {
     const q = query.trim().toLowerCase();
     if (!q)
         return undefined;
-    const typed = q.match(/^(components?|blocks?|animations?|backgrounds?|templates?|sites?|themes?|skills?|lib)\/(.+)$/);
+    const typed = q.match(/^(components?|charts?|blocks?|animations?|backgrounds?|templates?|sites?|themes?|skills?|lib)\/(.+)$/);
     if (typed) {
         const rawType = typed[1].replace(/s$/, "");
         const type = (rawType === "component" || TYPE_RANK.includes(rawType) ? rawType : "component");
@@ -95,6 +95,7 @@ export function rewriteUserSource(src) {
         .replace(/@\/registry\/ui\//g, "@/components/ui/")
         .replace(/@\/registry\/animations\//g, "@/components/animations/")
         .replace(/@\/registry\/backgrounds\//g, "@/components/backgrounds/")
+        .replace(/@\/registry\/charts\//g, "@/components/charts/")
         .replace(/@\/registry\/templates\//g, "@/components/templates/")
         .replace(/@\/registry\/blocks\//g, "@/components/blocks/")
         .replace(/@\/registry\/sites\//g, "@/components/sites/");
@@ -109,6 +110,10 @@ export function implicitLibSlugs(content) {
         slugs.push("persian");
     if (content.includes("@/lib/number-to-words"))
         slugs.push("number-to-words");
+    if (content.includes("@/lib/iran-divisions"))
+        slugs.push("iran-divisions");
+    if (content.includes("@/lib/chart-utils"))
+        slugs.push("chart-utils");
     if (content.includes("@/lib/float"))
         slugs.push("float");
     return slugs;

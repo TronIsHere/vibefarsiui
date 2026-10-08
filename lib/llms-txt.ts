@@ -2,6 +2,7 @@ import {
   animations,
   backgrounds,
   blocks,
+  charts,
   components,
   skills,
   templates,
@@ -45,6 +46,7 @@ MCP: ${SITE_URL}/mcp  (also \`npx -y @vibefarsi/mcp\`)
 ## Counts
 - ${components.length} components
 - ${blocks.length} blocks
+- ${charts.length} charts
 - ${animations.length} animations
 - ${backgrounds.length} backgrounds
 - ${templates.length} templates
@@ -57,6 +59,7 @@ MCP: ${SITE_URL}/mcp  (also \`npx -y @vibefarsi/mcp\`)
 - About: ${SITE_URL}/about
 - Components: ${SITE_URL}/components
 - Blocks: ${SITE_URL}/blocks
+- Charts: ${SITE_URL}/charts
 - Animations: ${SITE_URL}/animations
 - Backgrounds: ${SITE_URL}/backgrounds
 - Templates: ${SITE_URL}/templates
@@ -73,6 +76,9 @@ ${list(components, "/components")}
 
 ## Blocks
 ${list(blocks, "/blocks")}
+
+## Charts
+${list(charts, "/charts")}
 
 ## Animations
 ${list(animations, "/animations")}

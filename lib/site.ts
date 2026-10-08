@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 export const SITE_URL = "https://vibefarsi.ir";
 export const SITE_NAME = "وایب‌فارسی";
 export const SITE_NAME_EN = "VibeFarsi";
-export const GITHUB_URL = "https://github.com/TronIsHere/vibafarsiui";
-export const GITHUB_REPO = "TronIsHere/vibafarsiui";
+export const GITHUB_URL = "https://github.com/TronIsHere/vibefarsiui";
+export const GITHUB_REPO = "TronIsHere/vibefarsiui";
 export const X_URL = "https://x.com/Erwinamm";
 export const SPONSOR_URL = X_URL;
 export const NPM_URL = "https://www.npmjs.com/package/vibefarsi";
@@ -107,7 +107,13 @@ export function siteJsonLd() {
         "@type": "Organization",
         "@id": orgId,
         name: SITE_NAME,
-        alternateName: [SITE_NAME_EN, "Vibe Farsi", "VibeFarsi UI"],
+        alternateName: [
+          "وایب فارسی",
+          "وایب‌فارسی UI",
+          SITE_NAME_EN,
+          "Vibe Farsi",
+          "VibeFarsi UI",
+        ],
         url: SITE_URL,
         logo: {
           "@type": "ImageObject",
@@ -121,7 +127,7 @@ export function siteJsonLd() {
         "@id": siteId,
         url: SITE_URL,
         name: SITE_NAME,
-        alternateName: SITE_NAME_EN,
+        alternateName: ["وایب فارسی", SITE_NAME_EN, "Vibe Farsi"],
         inLanguage: "fa-IR",
         description: SITE_DESCRIPTION,
         publisher: { "@id": orgId },

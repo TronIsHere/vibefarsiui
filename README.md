@@ -63,6 +63,7 @@ npx vibefarsi list
 | --- | --- |
 | کامپوننت | `components/ui` |
 | بلاک | `components/blocks` |
+| نمودار | `components/charts` |
 | انیمیشن | `components/animations` |
 | پس‌زمینه | `components/backgrounds` |
 | قالب | `components/templates` |
@@ -138,6 +139,7 @@ get_component(["input", "price", "button"])
 | --- | --- | --- |
 | [کامپوننت‌ها](https://vibefarsi.ir/components) | ۶۸ | دکمه، فرم، جدول داده، تقویم شمسی، شماره‌ی موبایل، کد تأیید، شماره‌ی شبا، قیمت به تومان |
 | [بلاک‌ها](https://vibefarsi.ir/blocks) | ۸ | هیرو، ویژگی‌ها، ردیف قیمت، پرسش‌های متداول، آمار، نظر مشتریان، کارت ورود، فراخوان پایانی |
+| [نمودارها](https://vibefarsi.ir/charts) | ۱۵ | خطی، ناحیه‌ای، میله‌ای، ترکیبی، دایره‌ای، گیج، راداری، پراکندگی، نقشه‌ی حرارتی تقویم شمسی، قیف، نقشه‌ی درختی، آبشاری و شمعی، همه بدون کتابخانه |
 | [انیمیشن‌ها](https://vibefarsi.ir/animations) | ۳۹ | انیمیشن با CSS و React، بدون کتابخانه‌ی اضافه |
 | [پس‌زمینه‌ها](https://vibefarsi.ir/backgrounds) | ۴۴ | الگو و نور کم‌کنتراست که متن روشون خوانا می‌مونه |
 | [قالب‌ها](https://vibefarsi.ir/templates) | ۲۴ | صفحه‌های کامل، از همین کامپوننت‌ها |
@@ -166,7 +168,7 @@ get_component(["input", "price", "button"])
 </div>
 
 ```
-registry/         ui/  blocks/  animations/  backgrounds/  templates/  themes/  skills/
+registry/         ui/  blocks/  charts/  animations/  backgrounds/  templates/  themes/  skills/
 lib/registry/     names, descriptions, prompts, catalog builder
 app/r/            GET /r  (catalog)    GET /r/{type}/{slug}.json  (item)
 packages/cli/     npx vibefarsi

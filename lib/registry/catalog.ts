@@ -1,5 +1,6 @@
 import { animations } from "./animations";
 import { backgrounds } from "./backgrounds";
+import { charts } from "./charts";
 import { blocks } from "./blocks";
 import { components } from "./components";
 import { libs } from "./libs";
@@ -10,7 +11,7 @@ import { hostedSkills, skillTarget } from "./skills";
 import { themes } from "./themes";
 import type { DocBase, SiteDoc, SkillDoc, ThemeDoc } from "./types";
 
-export const REGISTRY_TYPES = ["component", "animation", "background", "template", "block", "site", "theme", "lib", "skill"] as const;
+export const REGISTRY_TYPES = ["component", "chart", "animation", "background", "template", "block", "site", "theme", "lib", "skill"] as const;
 export type RegistryType = (typeof REGISTRY_TYPES)[number];
 
 export type CatalogItem = {
@@ -140,6 +141,8 @@ export const EXTRA_ALIASES: Record<string, string[]> = {
   "national-id-input": ["national id", "کد ملی", "کدملی", "شماره ملی", "melli code"],
   "card-number-input": ["card number", "شماره کارت", "کارت بانکی", "bank card", "bin", "شماره‌ی کارت"],
   "plate-input": ["plate", "پلاک", "پلاک خودرو", "license plate", "ماشین", "خودرو"],
+  "address-picker": ["address", "آدرس", "نشانی", "استان", "شهر", "province", "city", "استان و شهر", "شهرستان"],
+  "postal-code-input": ["postal code", "zip", "کد پستی", "کدپستی", "post code"],
   "date-range-picker": ["jalali-range-picker", "range picker", "بازه تاریخ", "بازه‌ی تاریخ", "از تاریخ تا تاریخ", "range calendar"],
   "time-picker": ["jalali-time-picker", "timepicker", "ساعت", "انتخاب ساعت", "زمان", "clock"],
   "amount-input": ["amount", "مبلغ", "money input", "تومان", "به حروف"],
@@ -180,6 +183,7 @@ function targetFor(type: RegistryType, file: string): string {
   if (type === "component") return `components/ui/${name}`;
   if (type === "animation") return `components/animations/${name}`;
   if (type === "background") return `components/backgrounds/${name}`;
+  if (type === "chart") return `components/charts/${name}`;
   if (type === "template") return `components/templates/${name}`;
   if (type === "block") return `components/blocks/${name}`;
   if (type === "theme") return "app/globals.css";
@@ -267,6 +271,7 @@ export function buildCatalog(homepage = "https://vibefarsi.ir"): Catalog {
   const items: CatalogItem[] = [
     ...libs.map((i) => fromDoc("lib", i)),
     ...components.map((i) => fromDoc("component", i, { category: i.cat, tags: [i.cat] })),
+    ...charts.map((i) => fromDoc("chart", i, { category: i.cat, tags: [i.cat, ...i.tags] })),
     ...animations.map((i) => fromDoc("animation", i)),
     ...backgrounds.map((i) => fromDoc("background", i, { tags: i.engine ? ["webgl", "shader", "شیدر"] : [] })),
     ...templates.map((i) => fromDoc("template", i, { tags: i.tags })),

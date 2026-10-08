@@ -1,8 +1,8 @@
-import { animations, backgrounds, blocks, buildPrompt, buildThemePrompt, components, hostedSkills, libs, sites, skillTarget, templates, themes } from "@/lib/registry";
+import { animations, backgrounds, blocks, charts, buildPrompt, buildThemePrompt, components, hostedSkills, libs, sites, skillTarget, templates, themes } from "@/lib/registry";
 import { readSource } from "@/lib/source";
 import { siteRegistryItem } from "@/lib/site-registry";
 
-const lists = { components, animations, backgrounds, templates, blocks, themes, lib: libs, skills: hostedSkills } as const;
+const lists = { components, charts, animations, backgrounds, templates, blocks, themes, lib: libs, skills: hostedSkills } as const;
 type Type = keyof typeof lists;
 
 export function generateStaticParams() {
@@ -19,6 +19,7 @@ function userPath(type: Type, file: string) {
   if (type === "components") return `components/ui/${name}`;
   if (type === "animations") return `components/animations/${name}`;
   if (type === "backgrounds") return `components/backgrounds/${name}`;
+  if (type === "charts") return `components/charts/${name}`;
   if (type === "blocks") return `components/blocks/${name}`;
   return `components/templates/${name}`;
 }
@@ -46,7 +47,7 @@ export async function GET(_req: Request, ctx: RouteContext<"/r/[type]/[slug]">) 
 
   const content = readSource(item.file);
   const isTheme = type === "themes";
-  const kind = (type === "lib" ? "lib" : type.replace(/s$/, "")) as "component" | "animation" | "background" | "template" | "block" | "lib" | "skill";
+  const kind = (type === "lib" ? "lib" : type.replace(/s$/, "")) as "component" | "chart" | "animation" | "background" | "template" | "block" | "lib" | "skill";
   const prompt = "swatches" in item
     ? buildThemePrompt(item)
     : "promptBullets" in item && kind !== "skill"

@@ -215,6 +215,25 @@ export function formatPlate(value: PlateValue): string {
   return `${fa(value.left)} ${value.letter} ${fa(value.middle)} ایران ${fa(value.region)}`.replace(/\s+/g, " ").trim();
 }
 
+/* ---------- postal code ---------- */
+
+/** Up to 10 Latin digits from «۸۱۶۳۸-۴۷۳۵۱», «8163847351» or a pasted address line. */
+export function normalizePostalCode(input: string): string {
+  return en(input).replace(/\D/g, "").slice(0, 10);
+}
+
+/** «۸۱۶۳۸-۴۷۳۵۱»: two groups of five, the way it's printed on bills. */
+export function formatPostalCode(input: string): string {
+  const d = normalizePostalCode(input);
+  return fa(d.length > 5 ? `${d.slice(0, 5)}-${d.slice(5)}` : d);
+}
+
+/** Ten digits and not one digit repeated (0000000000). Iran Post publishes no checksum. */
+export function isPostalCode(input: string): boolean {
+  const d = normalizePostalCode(input);
+  return d.length === 10 && !/^(\d)\1{9}$/.test(d);
+}
+
 /* ---------- relative time ---------- */
 
 /** «همین حالا»، «۵ دقیقه پیش»، «۳ ساعت پیش»، «دیروز»، «۴ روز پیش» */

@@ -7,6 +7,8 @@ export const libModules: Record<string, () => Promise<unknown>> = import.meta.gl
   "./jalali.ts",
   "./persian.ts",
   "./number-to-words.ts",
+  "./iran-divisions.ts",
+  "./chart-utils.ts",
   "./svg-text-path-rtl.ts",
   "./float.tsx",
 ]);

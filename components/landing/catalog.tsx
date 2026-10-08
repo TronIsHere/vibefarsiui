@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn, fa } from "@/lib/utils";
+import { fillGrid } from "@/lib/grid-fill";
 import { componentCats, components, type ComponentCat } from "@/lib/registry";
 import { componentCardDemos, componentDemos } from "@/components/demos/components";
 import { goldSponsors } from "@/lib/sponsors";
@@ -33,17 +34,17 @@ export function Catalog({ standalone }: { standalone?: boolean }) {
     </div>
   );
 
+  const sponsors = !standalone && active === "all" ? goldSponsors : [];
+  const spans = fillGrid([...sponsors.map(() => 1), ...visible.map((it) => (it.wide ? 2 : 1))], standalone ? { base: 1, sm: 2, xl: 3 } : { base: 1, sm: 2, xl: 4 });
   const grid = (
     <ul className={cn("grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4", standalone ? "xl:grid-cols-3" : "p-3 sm:p-4 xl:grid-cols-4")}>
-      {!standalone &&
-        active === "all" &&
-        goldSponsors.map((sponsor) => (
-          <li key={sponsor.name}>
+      {sponsors.map((sponsor, i) => (
+          <li key={sponsor.name} className={spans[i]}>
             <SponsorCatalogCard sponsor={sponsor} />
           </li>
         ))}
-      {visible.map((it) => (
-        <li key={it.slug} className={cn(it.wide && "sm:col-span-2")}>
+      {visible.map((it, i) => (
+        <li key={it.slug} className={spans[sponsors.length + i]}>
           <ItemCard href={`/components/${it.slug}`} name={it.name} slug={it.slug} desc={it.desc}>
             <div className="flex w-full min-w-0 items-center justify-center">
               {(standalone ? componentDemos : componentCardDemos)[it.slug]}
