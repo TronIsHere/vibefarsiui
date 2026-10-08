@@ -1,6 +1,6 @@
 {
   "name": "vibefarsi",
-  "version": "0.1.1",
+  "version": "2.0.0",
   "description": "Add RTL Persian components, fonts, and Graphite tokens to a React app.",
   "keywords": ["persian", "farsi", "rtl", "react", "tailwind", "components", "jalali"],
   "license": "MIT",

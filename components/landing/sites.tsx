@@ -5,6 +5,7 @@ import { sites } from "@/lib/registry";
 import { cn, fa } from "@/lib/utils";
 import { Section } from "./frame";
 import { SectionFoot, SectionHead } from "./section-head";
+import { fillGrid } from "@/lib/grid-fill";
 
 /** Showcase of whole multi-page sites: a browser-framed shot, the page list and highlights. */
 export function Sites({ standalone }: { standalone?: boolean }) {
@@ -23,10 +24,11 @@ export function Sites({ standalone }: { standalone?: boolean }) {
     />
   );
 
+  const spans = fillGrid(sites.map(() => 1), { base: 1, lg: 2 });
   const grid = (
     <ul className={cn("grid grid-cols-1 gap-4 lg:grid-cols-2", !standalone && "p-3 sm:p-4")}>
-      {sites.map((s) => (
-        <li key={s.slug}>
+      {sites.map((s, i) => (
+        <li key={s.slug} className={spans[i]}>
           <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors duration-200 hover:border-foreground/25 focus-within:ring-2 focus-within:ring-ring/60">
             <div className="relative bg-background p-3 pb-0 sm:p-4 sm:pb-0">
               <div className="overflow-hidden rounded-t-xl border border-b-0 border-border bg-card shadow-[0_24px_48px_-24px_rgb(0_0_0/0.5)]">

@@ -12,8 +12,21 @@ export const SHARED_RULES = [
   "All visible UI copy (labels, placeholders, empty states, errors) is Persian (Farsi). Code identifiers stay English.",
 ];
 
+/** Shared rules every chart prompt carries, on top of the general Persian RTL rules. */
+export const CHART_RULES = [
+  "Pure SVG + React, no chart library. Measure the container with ResizeObserver and draw in real pixels (no viewBox stretching, so text never scales).",
+  "RTL geometry: the first category or oldest date sits on the right and time flows leftward; the value axis is on the right edge; horizontal bars grow right-to-left from labels on the right.",
+  "SVG <text> gets direction=\"rtl\" so «۱۲ میلیون» keeps the number on the right; under rtl, text-anchor start anchors at the right edge.",
+  "Persian digits everywhere; compact axis ticks (هزار، میلیون، میلیارد) and full numbers with «٬» in tooltips; «٪» after the number; Jalali labels for dates («۱۲ مهر»).",
+  "Colors come from var(--chart-N, fallback) so each design system can set its own palette; never hardcode a hex per series.",
+  "Keyboard: the plot is focusable, ArrowLeft goes to the next item (it is on the left), ArrowRight to the previous, Home/End jump, Escape clears; the active item is read through an aria-live region.",
+  "Every chart renders an sr-only <table> with the raw numbers and a legend whose buttons toggle series (aria-pressed); the last visible series cannot be hidden.",
+  "Entry motion uses the theme's --motion and --motion-ease and is disabled under prefers-reduced-motion.",
+];
+
 const KIND_LABEL = {
   component: "component",
+  chart: "chart",
   animation: "animation",
   background: "background",
   template: "template",
@@ -41,6 +54,7 @@ export function buildPrompt(
     "This item requires:",
     ...item.promptBullets.map((b) => `• ${b}`),
     "",
+    ...(kind === "chart" ? ["Chart rules:", ...CHART_RULES.map((b) => `• ${b}`), ""] : []),
     "Persian / RTL rules for all output:",
     ...SHARED_RULES.map((b) => `• ${b}`),
     "",

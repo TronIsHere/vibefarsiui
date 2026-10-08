@@ -4,6 +4,7 @@ import { blocks } from "@/lib/registry";
 import { Section } from "./frame";
 import { SectionFoot, SectionHead } from "./section-head";
 import { CatalogShot } from "./catalog-shot";
+import { fillGrid } from "@/lib/grid-fill";
 
 export function Blocks({ standalone }: { standalone?: boolean }) {
   const head = (
@@ -17,10 +18,11 @@ export function Blocks({ standalone }: { standalone?: boolean }) {
       standalone={standalone}
     />
   );
+  const spans = fillGrid(blocks.map(() => 1), { base: 1, sm: 2 });
   const grid = (
     <ul className={cn("grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4", standalone ? "" : "p-3 sm:p-4")}>
-      {blocks.map((b) => (
-        <li key={b.slug}>
+      {blocks.map((b, i) => (
+        <li key={b.slug} className={spans[i]}>
           <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors duration-200 hover:border-foreground/25 focus-within:ring-2 focus-within:ring-ring/60">
             <div className="relative h-56 overflow-hidden bg-background">
               <CatalogShot

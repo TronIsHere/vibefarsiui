@@ -13,6 +13,7 @@ import {
   Search,
   Sparkles,
   WandSparkles,
+  ChartLine,
 } from "lucide-react";
 import { CommandDialog, type CommandItem } from "@/registry/ui/command";
 import {
@@ -20,6 +21,7 @@ import {
   animations,
   backgrounds,
   blocks,
+  charts,
   components,
   sections,
   skills,
@@ -30,6 +32,7 @@ import {
 const TYPE_META = {
   component: { href: (slug: string) => `/components/${slug}`, group: "کامپوننت‌ها", icon: Boxes },
   block: { href: (slug: string) => `/blocks/${slug}`, group: "بلاک‌ها", icon: PanelsTopLeft },
+  chart: { href: (slug: string) => `/charts/${slug}`, group: "نمودارها", icon: ChartLine },
   animation: { href: (slug: string) => `/animations/${slug}`, group: "انیمیشن‌ها", icon: Sparkles },
   background: { href: (slug: string) => `/backgrounds/${slug}`, group: "پس‌زمینه‌ها", icon: Image },
   template: { href: (slug: string) => `/templates/${slug}`, group: "قالب‌ها", icon: LayoutTemplate },
@@ -85,6 +88,7 @@ export function SiteSearch() {
     const collections: [keyof typeof TYPE_META, SearchDoc[]][] = [
       ["component", components.map((c) => ({ ...c, tags: [c.cat] }))],
       ["block", blocks],
+      ["chart", charts.map((c) => ({ ...c, tags: [...c.tags] }))],
       ["animation", animations],
       ["background", backgrounds],
       ["template", templates],

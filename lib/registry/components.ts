@@ -92,8 +92,11 @@ const cities = ["اصفهان", "اهواز", "اراک", "اردبیل", "ته�
       { name: "options", type: "string[]", desc: "همه‌ی گزینه‌ها. فیلتر داخل خود کامپوننت انجام میشه." },
       { name: "value / onChange", type: "string / (v) => void", desc: "کنترل‌شده یا آزاد." },
       { name: "emptyText", type: "string", default: '"چیزی پیدا نشد"', desc: "متن حالت خالی." },
+      { name: "strict", type: "boolean", default: "false", desc: "فقط گزینه‌های فهرست قبول میشن و متن آزاد بعد از خروج از فیلد یا به گزینه‌ی هم‌اسم می‌چسبه یا برمی‌گرده." },
+      { name: "id / name / disabled", type: "string / string / boolean", desc: "name یک ورودی مخفی با مقدار انتخاب‌شده برای فرم معمولی می‌سازه." },
     ],
-    promptBullets: ["Two-stage filter: options that start with the query first, then those that contain it.", "Highlight the matched span of each option (font-semibold).", "Up/down, Enter, Escape; role=combobox and aria-expanded.", "Keep the keyboard-active option scrolled into view (scrollIntoView block nearest)."],
+    notes: ["تطبیق به ي و ك عربی، آ و ا، فاصله و نیم‌فاصله حساس نیست، پس «علي اباد» هم «علی‌آباد» را پیدا می‌کنه."],
+    promptBullets: ["Two-stage filter: options that start with the query first, then those that contain it.", "Highlight the matched span of each option (font-semibold).", "Up/down, Enter, Escape; role=combobox and aria-expanded.", "Keep the keyboard-active option scrolled into view (scrollIntoView block nearest).", "Fold Arabic ي/ك to ی/ک, آ to ا, and drop spaces/ZWNJ before matching; strict mode snaps free text to an option or reverts on blur; sync the shown text when the value prop changes."],
   },
   {
     slug: "otp-field", name: "کد تأیید", cat: "form", file: ui("otp-field"),
@@ -683,7 +686,7 @@ const week = jalaliWeekLabels() // ["ش","ی","د","س","چ","پ","ج"] ending t
       { name: "highlight", type: "number", desc: "شاخص میله‌ی برجسته (مثلاً امروز)." },
       { name: "height", type: "number", default: "180", desc: "ارتفاع viewBox." },
     ],
-    notes: ["بدون کتابخانه‌ی نمودار، فقط SVG با viewBox و عرض ۱۰۰٪. برای داشبوردهای سنگین همین هندسه را میشه به Recharts منتقل کرد.", "jalaliWeekLabels از شنبه شروع نمی‌کنه و هفت روز اخیر را با نام روز شمسی برمی‌گردونه. برای هفته‌ی تقویمی ثابت از JALALI_WEEKDAYS_SHORT استفاده کنید."],
+    notes: ["این نسخه‌ی سبک برای کارت‌های کوچکه. برای راهنما، تولتیپ کامل، کیبورد و نمودارهای دیگه سراغ بخش نمودارها (/charts) برید که با همین هندسه‌ی راست‌چین ساخته شده.", "بدون کتابخانه‌ی نمودار، فقط SVG با viewBox و عرض ۱۰۰٪.", "jalaliWeekLabels از شنبه شروع نمی‌کنه و هفت روز اخیر را با نام روز شمسی برمی‌گردونه. برای هفته‌ی تقویمی ثابت از JALALI_WEEKDAYS_SHORT استفاده کنید."],
     promptBullets: ["x of the first point is on the right (x = width − pad − (i+1)·slot) and the value axis labels sit on the right edge.", "\"Nice\" ticks (1, 2, 2.5, 5 × power of 10) and compact Persian formatting; simple hover tooltip.", "Time labels from the Jalali calendar; weekly short names ش to ج."],
   },
   {
@@ -851,6 +854,50 @@ import { stringifyPlate } from "@/lib/persian"
     ],
     notes: ["خود پلاک dir=\"ltr\" هست چون روی فلز از چپ خوانده میشه، ولی فهرست حرف‌ها rtl هست و کلیدهای چپ و راست در آن برعکس میشن.", "تایپ حرف روی جعبه‌ی حرف هم کار می‌کنه و ي و ك عربی به ی و ک، و «ا» به «الف» تبدیل میشه.", "پیست کردن کل پلاک در جعبه‌ی اول همه‌ی بخش‌ها را پر می‌کنه."],
     promptBullets: ["Plate frame dir=ltr: a dark «I.R. IRAN» strip, a 2-digit box, a letter button, a 3-digit box, then a divided «ایران» box with the 2-digit region code.", "The letter button opens an RTL listbox grid of legal plate letters with a footer naming the class (تاکسی، دولتی، شخصی…); arrow keys, typeahead, Escape, and focus return.", "Typing auto-advances between boxes, Backspace on an empty box goes back, and pasting «12ب345-11» fills everything."],
+  },
+  {
+    slug: "address-picker", name: "استان و شهر", cat: "form", file: ui("address-picker"), wide: true, deps: ["lucide-react"], registryDeps: ["combobox", "iran-divisions"],
+    desc: "دو کمبوباکس به‌هم‌وصل برای ۳۱ استان و شهرهاشون. فهرست شهر دنبال استان میاد، با عوض شدن استان خالی میشه و فقط اسم‌های داخل فهرست قبول میشن.",
+    usage: `import { AddressPicker } from "@/components/ui/address-picker"
+import { PostalCodeInput } from "@/components/ui/postal-code-input"
+
+<AddressPicker onChange={(addr, complete) => complete && setAddress(addr)} />
+<PostalCodeInput onChange={(digits, valid) => setPostal(valid ? digits : null)} />
+
+// فقط استان‌هایی که ارسال دارید:
+<AddressPicker provinces={["تهران", "البرز"]} name="ship" />`,
+    props: [
+      { name: "value / defaultValue", type: "{ province, city }", desc: "اسم استان و شهر، همون‌طور که در lib/iran-divisions.ts نوشته شده." },
+      { name: "onChange", type: "(value, complete) => void", desc: "complete وقتی هر دو انتخاب شده باشن و شهر مال همون استان باشه." },
+      { name: "provinces", type: "string[]", desc: "محدود کردن فهرست استان‌ها، مثلاً برای ارسال فقط به چند استان." },
+      { name: "name", type: "string", desc: "دو ورودی مخفی name-province و name-city برای فرم معمولی می‌سازه." },
+      { name: "invalid", type: "boolean", desc: "بعد از ثبت فرم true بدید تا زیر فیلد خالی خطا نشون داده بشه." },
+      { name: "layout", type: '"row" | "stack"', default: '"row"', desc: "row از sm به بالا دوستونی میشه." },
+    ],
+    notes: [
+      "داده‌ها مراکز شهرستان و شهرهای بزرگ‌تر هر استان هستن و مرکز استان همیشه اول فهرست میاد. اگه همه‌ی شهرها و روستاها را لازم دارید فهرست را از سرور بگیرید و به Combobox بدید.",
+      "تایپ با ي و ك عربی یا بدون نیم‌فاصله هم شهر را پیدا می‌کنه، چون Combobox قبل از مقایسه حروف را یکسان می‌کنه.",
+    ],
+    promptBullets: [
+      "Two strict Comboboxes (province, city) over the 31 provinces in lib/iran-divisions.ts; city disabled with «اول استان را انتخاب کنید» until a province is picked.",
+      "Changing the province clears the city; onChange(value, complete) where complete means the city belongs to the province.",
+      "Labels استان and شهر, errors «استان را انتخاب کنید.» / «شهر را انتخاب کنید.» only after submit via an invalid prop.",
+    ],
+  },
+  {
+    slug: "postal-code-input", name: "کد پستی", cat: "form", file: ui("postal-code-input"), deps: ["lucide-react"], registryDeps: ["persian"],
+    desc: "کد پستی ده‌رقمی با اعداد فارسی و گروه‌بندی ۵-۵ مثل روی قبض‌ها. با خط تیره یا بدونش پیست میشه و خطای طول بعد از خروج از فیلد نشون داده میشه.",
+    usage: `import { PostalCodeInput } from "@/components/ui/postal-code-input"
+
+<PostalCodeInput name="postal" onChange={(digits, valid) => setPostal(valid ? digits : null)} />`,
+    props: [
+      { name: "value / defaultValue", type: "string", desc: "رقم‌های لاتین. رشته بمونه تا صفر اول حذف نشه." },
+      { name: "onChange", type: "(digits, valid) => void", desc: "رقم‌های نرمال‌شده و نتیجه‌ی اعتبارسنجی." },
+      { name: "invalid", type: "boolean", desc: "بعد از ثبت فرم true بدید تا خالی یا ناقص بودن هم خطا بده." },
+      { name: "name", type: "string", desc: "ورودی مخفی با ده رقم، فقط وقتی معتبر باشه." },
+    ],
+    notes: ["پست ایران رقم کنترل منتشر نکرده، پس اینجا فقط ده رقم بودن و تکراری نبودن همه‌ی رقم‌ها بررسی میشه.", "autoComplete=\"postal-code\" مرورگر را وادار می‌کنه کد ذخیره‌شده را پیشنهاد کنه."],
+    promptBullets: ["dir=ltr field with a mailbox icon; Persian digits shown as «۱۲۳۴۵-۶۷۸۹۰»; store 10 Latin digits as a string.", "Validate length and digits only (no invented structural rules); error «کد پستی باید ۱۰ رقم باشد.» after blur or submit, never on the first keystroke."],
   },
   {
     slug: "date-range-picker", name: "بازه‌ی تاریخ شمسی", cat: "form", file: ui("date-range-picker"), wide: true, deps: ["lucide-react"], registryDeps: ["jalali"],

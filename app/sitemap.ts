@@ -3,6 +3,7 @@ import {
   animations,
   backgrounds,
   blocks,
+  charts,
   components,
   sites,
   skills,
@@ -20,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absUrl("/about"), lastModified, changeFrequency: "weekly", priority: 0.8 },
     { url: absUrl("/components"), lastModified, changeFrequency: "weekly", priority: 0.9 },
     { url: absUrl("/blocks"), lastModified, changeFrequency: "weekly", priority: 0.8 },
+    { url: absUrl("/charts"), lastModified, changeFrequency: "weekly", priority: 0.8 },
     { url: absUrl("/animations"), lastModified, changeFrequency: "weekly", priority: 0.8 },
     { url: absUrl("/backgrounds"), lastModified, changeFrequency: "weekly", priority: 0.8 },
     { url: absUrl("/templates"), lastModified, changeFrequency: "weekly", priority: 0.8 },
@@ -50,6 +52,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...animations.map((item) => ({
       url: absUrl(`/animations/${item.slug}`),
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+    ...charts.map((item) => ({
+      url: absUrl(`/charts/${item.slug}`),
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.6,

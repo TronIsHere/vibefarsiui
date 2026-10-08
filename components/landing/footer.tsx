@@ -37,7 +37,7 @@ export function MonoFooter() {
         <div className="flex flex-col gap-4 px-5 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <Logo />
           <nav className="flex flex-wrap gap-x-5 gap-y-2" aria-label="پاورقی">
-            {[["مستندات", "/docs"], ["درباره", "/about"], ["پرسش‌ها", "/#faq"], ["کامپوننت‌ها", "/components"], ["بلاک‌ها", "/blocks"], ["انیمیشن‌ها", "/animations"], ["پس‌زمینه‌ها", "/backgrounds"], ["قالب‌ها", "/templates"], ["سیستم‌های طراحی", "/themes"], ["MCP", "/docs#mcp"], ["حامیان", "/#sponsors"]].map(([l, h]) => (
+            {[["مستندات", "/docs"], ["درباره", "/about"], ["پرسش‌ها", "/#faq"], ["کامپوننت‌ها", "/components"], ["بلاک‌ها", "/blocks"], ["نمودارها", "/charts"], ["انیمیشن‌ها", "/animations"], ["پس‌زمینه‌ها", "/backgrounds"], ["قالب‌ها", "/templates"], ["سیستم‌های طراحی", "/themes"], ["MCP", "/docs#mcp"], ["حامیان", "/#sponsors"]].map(([l, h]) => (
               <Link key={l} href={h} className="cursor-pointer transition-colors hover:text-foreground">
                 {l}
               </Link>

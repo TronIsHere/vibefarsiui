@@ -7,10 +7,11 @@ import { Button } from "@/registry/ui/button";
 import { Field, Input } from "@/registry/ui/input";
 import { Textarea } from "@/registry/ui/textarea";
 import { RadioGroup } from "@/registry/ui/radio-group";
-import { Select } from "@/registry/ui/select";
 import { NumberField } from "@/registry/ui/number-field";
 import { Badge } from "@/registry/ui/badge";
 import { PhoneInput } from "@/registry/ui/phone-input";
+import { AddressPicker } from "@/registry/ui/address-picker";
+import { PostalCodeInput } from "@/registry/ui/postal-code-input";
 import { fa, formatToman } from "@/lib/utils";
 
 const items = [
@@ -68,10 +69,9 @@ export function CheckoutPage() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="نام و نام خانوادگی" htmlFor="c-n"><Input id="c-n" defaultValue="مریم احمدی" /></Field>
                 <div className="space-y-1.5"><span className="text-sm font-medium text-foreground/90">شماره‌ی موبایل</span><PhoneInput /></div>
-                <Field label="استان" htmlFor="c-p"><Select id="c-p" defaultValue="esf" options={[{ value: "thr", label: "تهران" }, { value: "esf", label: "اصفهان" }]} /></Field>
-                <Field label="شهر" htmlFor="c-c"><Select id="c-c" defaultValue="esf" options={[{ value: "esf", label: "اصفهان" }, { value: "ksh", label: "کاشان" }]} /></Field>
+                <AddressPicker id="c" defaultValue={{ province: "اصفهان", city: "اصفهان" }} className="sm:col-span-2" />
                 <Field label="آدرس" htmlFor="c-a" className="sm:col-span-2"><Textarea id="c-a" rows={2} defaultValue="خیابان چهارباغ بالا، کوچه‌ی ۱۲، پلاک ۸، واحد ۳" /></Field>
-                <Field label="کد پستی" htmlFor="c-z"><Input id="c-z" dir="ltr" inputMode="numeric" defaultValue="8163847351" /></Field>
+                <Field label="کد پستی" htmlFor="c-z"><PostalCodeInput id="c-z" defaultValue="8163847351" /></Field>
               </div>
             )}
             {step === 2 && <RadioGroup variant="cards" value={ship} onChange={setShip} options={shippingOptions} />}

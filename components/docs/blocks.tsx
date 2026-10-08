@@ -4,7 +4,7 @@ import { CodeBlock } from "@/components/shared/code-block";
 import { CopyButton } from "@/components/shared/copy-button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Breadcrumb } from "@/registry/ui/breadcrumb";
-import { animations, backgrounds, blocks, type DocBase, type PropDoc } from "@/lib/registry";
+import { animations, backgrounds, blocks, charts, type DocBase, type PropDoc } from "@/lib/registry";
 import { breadcrumbJsonLd, itemJsonLd } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -112,6 +112,7 @@ export function PropsTable({ props }: { props: PropDoc[] }) {
 /** Docs URL for a registry dependency slug; components are the default section. */
 export function depHref(slug: string) {
   if (backgrounds.some((i) => i.slug === slug)) return `/backgrounds/${slug}`;
+  if (charts.some((i) => i.slug === slug)) return `/charts/${slug}`;
   if (animations.some((i) => i.slug === slug)) return `/animations/${slug}`;
   if (blocks.some((i) => i.slug === slug)) return `/blocks/${slug}`;
   return `/components/${slug}`;
@@ -133,7 +134,7 @@ export function InstallSteps({
   const deps = ["lucide-react", ...(item.deps ?? [])].filter(
     (d, i, a) => a.indexOf(d) === i,
   );
-  const inner = item.registryDeps?.filter((d) => !["jalali", "persian", "utils", "number-to-words"].includes(d)) ?? [];
+  const inner = item.registryDeps?.filter((d) => !["jalali", "persian", "utils", "number-to-words", "iran-divisions", "chart-utils"].includes(d)) ?? [];
   return (
     <ol className="space-y-4">
       <li className="rounded-xl border border-border bg-card p-4">

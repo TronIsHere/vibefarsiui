@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { cn, fa } from "@/lib/utils";
+import { fillGrid } from "@/lib/grid-fill";
 import { backgrounds } from "@/lib/registry";
 import { backgroundDemos } from "@/components/demos/backgrounds";
 import { Section } from "./frame";
@@ -17,6 +18,7 @@ export function Backgrounds({ standalone }: { standalone?: boolean }) {
       standalone={standalone}
     />
   );
+  const spans = fillGrid(backgrounds.map(() => 1), standalone ? { base: 1, sm: 2, lg: 3 } : { base: 1, sm: 2, lg: 3, xl: 4 });
   const grid = (
     <ul
       className={cn(
@@ -24,8 +26,8 @@ export function Backgrounds({ standalone }: { standalone?: boolean }) {
         standalone ? "" : "p-3 sm:p-4 xl:grid-cols-4",
       )}
     >
-      {backgrounds.map((b) => (
-        <li key={b.slug}>
+      {backgrounds.map((b, i) => (
+        <li key={b.slug} className={spans[i]}>
           <Link
             href={`/backgrounds/${b.slug}`}
             className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors duration-200 hover:border-foreground/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"

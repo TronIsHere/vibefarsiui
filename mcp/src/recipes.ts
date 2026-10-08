@@ -19,11 +19,11 @@ export const RECIPES: PageRecipe[] = [
     aliases: ["checkout", "cart", "payment", "سبد", "پرداخت", "سفارش", "درگاه"],
     summary: "سبد → آدرس (پلاک و کد پستی) → پست/پیک → مبلغ تومان → رفتن به درگاه.",
     theme: "graphite",
-    components: ["input", "select", "combobox", "radio-group", "number-field", "price", "button", "badge", "alert"],
-    libs: ["utils"],
+    components: ["input", "address-picker", "postal-code-input", "radio-group", "number-field", "price", "button", "badge", "alert"],
+    libs: ["utils", "iran-divisions"],
     layout: `Centered single column, max 36rem.
 1. Cart summary: name, quantity (number-field if editable), unit price and line total via formatToman.
-2. Address: province (combobox), city, street, plaque, unit, 10-digit postal code. Plaque and postal code dir=ltr.
+2. Address: address-picker (province → city, linked), street, plaque, unit, then postal-code-input (10 digits, dir=ltr). Plaque dir=ltr.
 3. Shipping: radio-group cards for پست / تیپاکس / پیک with estimated time.
 4. Grand total + tax + amount due (price). Full-width «پرداخت و ثبت سفارش» button.`,
     copy: ["سبد خرید", "آدرس تحویل", "روش ارسال", "قابل پرداخت", "پرداخت و ثبت سفارش", "پلاک", "کد پستی"],

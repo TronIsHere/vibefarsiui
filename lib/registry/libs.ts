@@ -49,6 +49,38 @@ formatPlate(parsePlate("12ب345-11")) // ۱۲ ب ۳۴۵ ایران ۱۱`,
     ],
   },
   {
+    slug: "iran-divisions",
+    name: "استان‌ها و شهرها",
+    desc: "۳۱ استان ایران با مراکز شهرستان و شهرهای بزرگ‌ترشون، مرکز استان اول. پیش‌نیاز انتخاب‌گر استان و شهره.",
+    file: "lib/iran-divisions.ts",
+    usage: `import { PROVINCES, PROVINCE_NAMES, citiesOf, provincesOf } from "@/lib/iran-divisions"
+
+citiesOf("اصفهان")[0]    // اصفهان
+provincesOf("حاجی‌آباد") // ["خراسان جنوبی", "هرمزگان"]`,
+    promptBullets: [
+      "31 provinces sorted with Intl.Collator(\"fa\"); each has name, capital and cities with the capital first.",
+      "Names use Persian ی/ک and ZWNJ («علی‌آباد کتول»); store the names, not ids, so they read well in orders and invoices.",
+      "Province and city always come from this list in forms, never free text.",
+    ],
+  },
+  {
+    slug: "chart-utils",
+    name: "ریاضی نمودار",
+    desc: "تیک‌های گرد، مقیاس راست‌به‌چپ، انباشتن سری‌ها، منحنی بدون بیرون‌زدگی، کمان، نقشه‌ی درختی و برچسب شمسی. پیش‌نیاز همه‌ی نمودارهاست.",
+    file: "lib/chart-utils.ts",
+    registryDeps: ["utils", "jalali"],
+    usage: `import { niceTicks, compactFa, percentFa, linePath, squarify } from "@/lib/chart-utils"
+
+niceTicks(0, 87).ticks // [0, 20, 40, 60, 80, 100]
+compactFa(12_500_000)  // ۱۲٫۵ میلیون
+percentFa(42.5, 1)     // ۴۲٫۵٪`,
+    promptBullets: [
+      "niceTicks picks steps of 1, 2, 2.5 or 5 × 10ⁿ and keeps 0 in range when data crosses it.",
+      "bandScale and pointScale put index 0 on the right edge; stackRows stacks positives and negatives away from zero; linePath supports linear, monotone (Fritsch–Carlson) and step.",
+      "compactFa uses هزار/میلیون/میلیارد with «٫» decimals; jalaliLabel turns a Date into «۱۲ مهر» or «مهر ۱۴۰۵».",
+    ],
+  },
+  {
     slug: "number-to-words",
     name: "عدد به حروف",
     desc: "۱٬۲۵۰٬۰۰۰ را به «یک میلیون و دویست و پنجاه هزار تومان» تبدیل می‌کنه، برای فاکتور، چک و تأیید پرداخت.",
