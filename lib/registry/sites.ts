@@ -101,7 +101,7 @@ export const sites: SiteDoc[] = [
       page("booking", "نوبت‌دهی", "BookingPage", "نوبت‌دهی آنلاین · کلینیک لبخند"),
       page("contact", "تماس", "ContactPage", "تماس و مسیر · کلینیک لبخند"),
     ],
-    registryDeps: ["button", "stepper", "radio-group", "calendar", "phone-input", "input", "textarea", "success-check", "rating", "reveal", "accordion", "counter", "compare-slider", "sheet"],
+    registryDeps: ["button", "stepper", "radio-group", "slot-picker", "phone-input", "input", "textarea", "success-check", "rating", "reveal", "accordion", "counter", "compare-slider", "sheet"],
     usage: "",
     promptBullets: [
       "Five routes sharing one Shell with an emergency phone bar, sticky header, «نوبت بگیرید» action and a mobile Sheet.",

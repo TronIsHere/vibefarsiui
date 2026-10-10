@@ -28,6 +28,7 @@ import { RidePage } from "@/registry/templates/ride";
 import { JobsPage } from "@/registry/templates/jobs";
 import { PosPage } from "@/registry/templates/pos";
 import { CrmPage } from "@/registry/templates/crm";
+import { TeamCalendarPage } from "@/registry/templates/team-calendar";
 
 export const templateComponents: Record<string, React.ComponentType> = {
   "shop-dashboard": ShopDashboard,
@@ -60,4 +61,5 @@ export const templateComponents: Record<string, React.ComponentType> = {
   jobs: JobsPage,
   pos: PosPage,
   crm: CrmPage,
+  "team-calendar": TeamCalendarPage,
 };

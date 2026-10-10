@@ -52,7 +52,7 @@ export function AgendaView({ events = [], date, defaultDate, onDateChange, days 
 
   const last = addDays(from, days - 1);
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("@container w-full", className)}>
       {toolbar && (
         <CalendarToolbar
           className="mb-3"
@@ -69,7 +69,7 @@ export function AgendaView({ events = [], date, defaultDate, onDateChange, days 
       ) : (
         <ol className="divide-y overflow-hidden rounded-surface border-line bg-card">
           {groups.map((g) => (
-            <li key={g.key} className="grid grid-cols-1 gap-2 p-3 sm:grid-cols-[9rem_1fr] sm:gap-4">
+            <li key={g.key} className="grid grid-cols-1 gap-2 p-3 @lg:grid-cols-[9rem_1fr] @lg:gap-4">
               <div>
                 <p className={cn("text-sm font-bold", g.info.isToday && "text-primary", (g.info.holiday || g.info.isWeekend) && "text-destructive")}>{g.label}</p>
                 <p className="text-[11px] text-muted-foreground">
@@ -93,7 +93,7 @@ export function AgendaView({ events = [], date, defaultDate, onDateChange, days 
                       onClick={() => onEventClick?.(e)}
                       className="flex w-full cursor-pointer items-start gap-3 rounded-control px-2 py-1.5 text-start transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring"
                     >
-                      <span className="w-24 shrink-0 pt-0.5 text-xs text-muted-foreground tabular-nums">{e.allDay ? "تمام روز" : formatTimeRange(e.start, e.end, settings.timeZone)}</span>
+                      <span className="w-[5.5rem] shrink-0 pt-0.5 text-xs text-muted-foreground tabular-nums">{e.allDay ? "تمام روز" : formatTimeRange(e.start, e.end, settings.timeZone)}</span>
                       <span aria-hidden className="mt-1.5 size-2 shrink-0 rounded-full" style={{ background: eventColor(e.color, indexOf.get(e) ?? 0) }} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-medium">{e.title}</span>

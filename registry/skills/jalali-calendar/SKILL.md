@@ -133,6 +133,11 @@ month", leap checks and age, use a converter (`toJalali` / `toGregorian`).
 - Never hard-code a full holiday list from memory. Load it from an official
   calendar source the user provides or an API, keyed by Gregorian date, and
   cache per year.
+- VibeFarsi ships this as data you can audit: the `hijri` lib holds Iran's
+  official lunar month starts (moon sighting, so no formula is exact) and the
+  `iran-holidays` lib derives every holiday from rules on top of it. Jalali
+  1404 and 1405 match the official calendar day for day; other years are
+  computed and lunar days are flagged `approximate`, so show «تقریبی».
 - Mark holidays in the picker as data (`disabled` + a tooltip with the name).
 
 ## 10. Checklist

@@ -93,11 +93,11 @@ export function OccasionsList({ range = "month", date, holidaysOnly, limit, titl
                     {o.holiday && <HolidayBadge approximate={o.approximate} />}
                     {!o.holiday && o.approximate && <span className="text-[10px] text-muted-foreground">تقریبی</span>}
                   </span>
-                  <span className="block text-[11px] text-muted-foreground">
-                    {JALALI_WEEKDAYS[jalaliWeekday(o.date)]}
-                    {showHijri && o.kind === "lunar" && ` · ${formatHijri(o.date)}`}
-                    {away > 1 && ` · ${fa(away)} روز دیگر`}
-                    {away >= -1 && away <= 1 && ` · ${dayLabel(o.date, today)}`}
+                  <span className="flex flex-wrap gap-x-1.5 text-[11px] text-muted-foreground [&>span]:whitespace-nowrap [&>span+span]:before:me-1.5 [&>span+span]:before:content-['·']">
+                    <span>{JALALI_WEEKDAYS[jalaliWeekday(o.date)]}</span>
+                    {showHijri && o.kind === "lunar" && <span>{formatHijri(o.date)}</span>}
+                    {away > 1 && <span>{fa(away)} روز دیگر</span>}
+                    {away >= -1 && away <= 1 && <span>{dayLabel(o.date, today)}</span>}
                   </span>
                 </span>
               </li>

@@ -64,6 +64,7 @@ npx vibefarsi list
 | کامپوننت | `components/ui` |
 | بلاک | `components/blocks` |
 | نمودار | `components/charts` |
+| تقویم | `components/calendar` |
 | انیمیشن | `components/animations` |
 | پس‌زمینه | `components/backgrounds` |
 | قالب | `components/templates` |
@@ -140,6 +141,7 @@ get_component(["input", "price", "button"])
 | [کامپوننت‌ها](https://vibefarsi.ir/components) | ۶۸ | دکمه، فرم، جدول داده، تقویم شمسی، شماره‌ی موبایل، کد تأیید، شماره‌ی شبا، قیمت به تومان |
 | [بلاک‌ها](https://vibefarsi.ir/blocks) | ۸ | هیرو، ویژگی‌ها، ردیف قیمت، پرسش‌های متداول، آمار، نظر مشتریان، کارت ورود، فراخوان پایانی |
 | [نمودارها](https://vibefarsi.ir/charts) | ۱۵ | خطی، ناحیه‌ای، میله‌ای، ترکیبی، دایره‌ای، گیج، راداری، پراکندگی، نقشه‌ی حرارتی تقویم شمسی، قیف، نقشه‌ی درختی، آبشاری و شمعی، همه بدون کتابخانه |
+| [تقویم](https://vibefarsi.ir/calendar) | ۱۰ | تقویم رویداد با نمای ماه، هفته، روز و فهرست، نمای سال، تعطیلات رسمی ایران با تاریخ قمری، انتخاب نوبت، گانت و برنامه‌ی شیفت |
 | [انیمیشن‌ها](https://vibefarsi.ir/animations) | ۳۹ | انیمیشن با CSS و React، بدون کتابخانه‌ی اضافه |
 | [پس‌زمینه‌ها](https://vibefarsi.ir/backgrounds) | ۴۴ | الگو و نور کم‌کنتراست که متن روشون خوانا می‌مونه |
 | [قالب‌ها](https://vibefarsi.ir/templates) | ۲۴ | صفحه‌های کامل، از همین کامپوننت‌ها |
@@ -168,7 +170,7 @@ get_component(["input", "price", "button"])
 </div>
 
 ```
-registry/         ui/  blocks/  charts/  animations/  backgrounds/  templates/  themes/  skills/
+registry/         ui/  blocks/  charts/  calendar/  animations/  backgrounds/  templates/  themes/  skills/
 lib/registry/     names, descriptions, prompts, catalog builder
 app/r/            GET /r  (catalog)    GET /r/{type}/{slug}.json  (item)
 packages/cli/     npx vibefarsi
@@ -212,7 +214,7 @@ npm run mcp:smoke
 
 ## لایسنس
 
-MIT. پلن پولی نداریم و هیچ کامپوننتی قفل نیست. می‌خوایم ساختن یک رابط فارسی خوب، کار ساده‌ای باشه.
+[MIT](./LICENSE). پلن پولی نداریم و هیچ کامپوننتی قفل نیست. می‌خوایم ساختن یک رابط فارسی خوب، کار ساده‌ای باشه.
 
 برای مشارکت و جزئیات استک: [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
