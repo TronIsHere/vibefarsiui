@@ -17,7 +17,7 @@ export function Hero() {
           <div className="animate-fade-up">
             <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11.5px] text-muted-foreground">
               <span className="size-1.5 animate-pulse-soft rounded-full bg-brand" />
-              v1 · رایگان و متن‌باز
+              v3 · رایگان و متن‌باز
             </span>
           </div>
 
