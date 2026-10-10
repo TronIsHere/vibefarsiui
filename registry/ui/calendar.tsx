@@ -14,6 +14,8 @@ export interface CalendarProps {
   max?: Date;
   /** Grey out Fridays (default true). */
   markWeekend?: boolean;
+  /** Holiday name for a day, or null. Named days turn red and show the name on hover; pass occasionsOn from the iran-holidays lib. */
+  occasion?: (date: Date) => string | null;
   compact?: boolean;
   className?: string;
 }
@@ -26,7 +28,7 @@ const sameDay = (a: Date | null | undefined, b: Date) =>
  * marked, today gets a ring. Values are plain JS Dates so the rest of your
  * app stays Gregorian-agnostic.
  */
-export function Calendar({ value, defaultValue = null, onChange, min, max, markWeekend = true, compact, className }: CalendarProps) {
+export function Calendar({ value, defaultValue = null, onChange, min, max, markWeekend = true, occasion, compact, className }: CalendarProps) {
   const [internal, setInternal] = React.useState<Date | null>(defaultValue);
   const selected = value === undefined ? internal : value;
   const today = React.useMemo(() => new Date(), []);
@@ -78,13 +80,15 @@ export function Calendar({ value, defaultValue = null, onChange, min, max, markW
           const isToday = sameDay(today, date);
           const fri = i % 7 === 6;
           const disabled = (min && date < min) || (max && date > max);
+          const holiday = occasion?.(date) ?? null;
           return (
             <button
               key={d}
               type="button"
               role="gridcell"
               aria-selected={isSel}
-              aria-label={`${fa(d)} ${JALALI_MONTHS[view.jm - 1]}`}
+              aria-label={`${fa(d)} ${JALALI_MONTHS[view.jm - 1]}${holiday ? `، تعطیل: ${holiday}` : ""}`}
+              title={holiday ?? undefined}
               disabled={!!disabled}
               onClick={() => pick(d)}
               className={cn(
@@ -93,6 +97,7 @@ export function Calendar({ value, defaultValue = null, onChange, min, max, markW
                 isSel && "bg-primary font-semibold text-primary-foreground",
                 !isSel && isToday && "ring-1 ring-inset ring-foreground/40",
                 !isSel && markWeekend && fri && "text-muted-foreground/60",
+                !isSel && holiday && "font-semibold text-destructive underline decoration-dotted underline-offset-4",
                 !isSel && !disabled && "cursor-pointer hover:bg-accent",
                 disabled && "cursor-not-allowed opacity-30",
               )}

@@ -164,6 +164,7 @@ const ADD_TARGETS: [string, string][] = [
   ["کامپوننت", "components/ui/"],
   ["بلاک", "components/blocks/"],
   ["نمودار", "components/charts/"],
+  ["تقویم", "components/calendar/"],
   ["انیمیشن", "components/animations/"],
   ["پس‌زمینه", "components/backgrounds/"],
   ["قالب", "components/templates/"],

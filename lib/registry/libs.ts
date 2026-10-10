@@ -111,6 +111,53 @@ forSvgTextPath("وایب‌فارسی · MCP")`,
     ],
   },
   {
+    slug: "hijri",
+    name: "تقویم قمری",
+    desc: "تاریخ هجری قمری همون‌طور که در ایران اعلام میشه، با جدول رسمی ماه‌ها و محاسبه‌ی تقریبی برای سال‌های بیرون از جدول. پیش‌نیاز تعطیلات و تقویمه.",
+    file: "lib/hijri.ts",
+    usage: `import { toHijri, fromHijri, formatHijri, HIJRI_MONTHS } from "@/lib/hijri"
+
+formatHijri(new Date(2026, 8, 23)) // ۱۱ ربیع‌الثانی ۱۴۴۸
+toHijri(date).approximate          // true بیرون از جدول رسمی`,
+    promptBullets: [
+      "Iran starts lunar months by moon sighting, so the official month starts live in a table (IRAN_HIJRI_MONTH_STARTS, Jalali dates); extend it when a new official calendar is published.",
+      "Outside the table use the tabular civil algorithm and return approximate: true; never present those dates as certain.",
+      "hijriMonthLength is exact (29 or 30) only when the next month is also in the table.",
+    ],
+  },
+  {
+    slug: "iran-holidays",
+    name: "تعطیلات رسمی ایران",
+    desc: "تعطیلات رسمی و مناسبت‌های مهم از روی قاعده، شمسی با تاریخ شمسی و مذهبی با تاریخ قمری. سال‌های ۱۴۰۴ و ۱۴۰۵ روزبه‌روز با تقویم رسمی چک شدن.",
+    file: "lib/iran-holidays.ts",
+    usage: `import { occasionsOn, isHoliday, isOffDay, businessDaysBetween, occasionsOf } from "@/lib/iran-holidays"
+
+occasionsOn(date)[0]?.title          // «شهادت امام رضا»
+isOffDay(date, { weekend: [5, 6] })  // پنجشنبه و جمعه هم تعطیل
+occasionsOf(1405).filter((o) => o.holiday).length // ۲۶`,
+    promptBullets: [
+      "Holidays are rules (solar by Jalali date, religious by Hijri date via lib/hijri), not a hard-coded list; the last day of صفر depends on the month length.",
+      "VERIFIED_JALALI_YEARS lists years checked against the official calendar; lunar days in other years carry approximate: true.",
+      "OccasionProvider (key → Occasion[]) lets an app swap in its own API.",
+    ],
+  },
+  {
+    slug: "calendar-utils",
+    name: "ابزار تقویم",
+    desc: "حساب روزهای شمسی، شبکه‌ی ماه، ساعت تهران از راه Intl، قالب زمان فارسی، چیدن رویدادهای هم‌زمان، نوارهای چندروزه، ساخت نوبت و محور زمانی راست به چپ. پیش‌نیاز همه‌ی کامپوننت‌های تقویمه.",
+    file: "lib/calendar-utils.ts",
+    usage: `import { monthGrid, addJalaliMonths, zonedDate, formatTimeRange, generateSlots } from "@/lib/calendar-utils"
+
+zonedDate(2026, 10, 12, 9, 30)        // ۰۹:۳۰ به وقت تهران
+formatTimeRange(start, end)           // «۱۰:۰۰ تا ۱۱:۳۰»
+generateSlots({ key: "2026-10-12", open: [["09:00", "13:00"]], duration: 30 })`,
+    promptBullets: [
+      "Calendar days are keys \"YYYY-MM-DD\"; timed events are instants placed in a time zone (default Asia/Tehran) through Intl parts, never by adding +03:30 by hand.",
+      "layoutTimed: overlap clusters share a column count; layoutSpans: multi-day bars in lanes; generateSlots: seats left from busy intervals and capacity.",
+      "timeScale maps instants right to left (start on the right edge).",
+    ],
+  },
+  {
     slug: "float",
     name: "لایه‌ی شناور",
     desc: "پورتال position:fixed برای پاپ‌آور، منو و کمبوباکس تا overflow:hidden آن‌ها را نبرد.",

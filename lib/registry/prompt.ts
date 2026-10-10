@@ -24,9 +24,21 @@ export const CHART_RULES = [
   "Entry motion uses the theme's --motion and --motion-ease and is disabled under prefers-reduced-motion.",
 ];
 
+/** Shared rules every calendar prompt carries. */
+export const CALENDAR_RULES = [
+  "Jalali (Solar Hijri) calendar with weeks from شنبه to جمعه; شنبه is the rightmost column and time flows right to left in timelines.",
+  "A calendar day is a key \"YYYY-MM-DD\"; timed events are Date instants placed in a time zone (default Asia/Tehran) through Intl, never by adding +03:30 by hand.",
+  "Holidays and occasions come from a provider (Iranian official holidays by rule: solar by Jalali date, religious by the Iranian lunar Hijri table); lunar dates outside the official table are marked «تقریبی».",
+  "Holidays and the weekend are shown with color plus text or a dot, never color alone; today is a ring and the selected day is filled.",
+  "Keyboard: day grids use roving tabindex, ArrowLeft = next day, ArrowRight = previous, Up/Down = a week, PageUp/PageDown = a month; prev/next chevrons point right/left.",
+  "Event colors use the chart palette var(--chart-N, fallback) so a design system sets them once.",
+  "Persian digits for every visible date and time («۱۴:۳۰»، «۱۲ مهر»); Hijri month names from a table.",
+];
+
 const KIND_LABEL = {
   component: "component",
   chart: "chart",
+  calendar: "calendar component",
   animation: "animation",
   background: "background",
   template: "template",
@@ -55,6 +67,7 @@ export function buildPrompt(
     ...item.promptBullets.map((b) => `• ${b}`),
     "",
     ...(kind === "chart" ? ["Chart rules:", ...CHART_RULES.map((b) => `• ${b}`), ""] : []),
+    ...(kind === "calendar" ? ["Calendar rules:", ...CALENDAR_RULES.map((b) => `• ${b}`), ""] : []),
     "Persian / RTL rules for all output:",
     ...SHARED_RULES.map((b) => `• ${b}`),
     "",

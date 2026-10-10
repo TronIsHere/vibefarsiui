@@ -29,6 +29,7 @@ import { RangeSlider } from "@/registry/ui/range-slider";
 import { Rating } from "@/registry/ui/rating";
 import { FileUpload } from "@/registry/ui/file-upload";
 import { Calendar } from "@/registry/ui/calendar";
+import { occasionsOn } from "@/lib/iran-holidays";
 import { DatePicker } from "@/registry/ui/date-picker";
 import { Command, CommandDialog } from "@/registry/ui/command";
 import { Dialog } from "@/registry/ui/dialog";
@@ -119,6 +120,9 @@ type Order = {
   date: Date;
   [k: string]: unknown;
 };
+/** Official Iranian holiday name for the Calendar demo. */
+const holidayName = (d: Date) => occasionsOn(d).find((o) => o.holiday)?.title ?? null;
+
 const tableRows: Order[] = [
   "مریم احمدی",
   "علی رضایی",
@@ -900,7 +904,7 @@ export const componentDemos: Record<string, React.ReactNode> = {
       />
     </div>
   ),
-  calendar: <Calendar defaultValue={new Date()} />,
+  calendar: <Calendar defaultValue={new Date()} occasion={holidayName} />,
   "date-picker": (
     <div className="w-full max-w-xs">
       <DatePicker placeholder="تاریخ ارسال" />
@@ -1547,7 +1551,7 @@ export const componentCardDemos: Record<string, React.ReactNode> = {
       />
     </div>
   ),
-  calendar: <Calendar defaultValue={new Date()} />,
+  calendar: <Calendar defaultValue={new Date()} occasion={holidayName} />,
   "date-picker": (
     <div className="w-full">
       <DatePicker placeholder="تاریخ ارسال" compact />

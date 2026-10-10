@@ -10,6 +10,7 @@ import {
   animations,
   backgrounds,
   blocks,
+  calendar,
   charts,
   components,
   sections,
@@ -20,7 +21,7 @@ import {
   type SectionKey,
 } from "@/lib/registry";
 
-const lists = { components, blocks, charts, animations, backgrounds, templates, sites, themes, skills } as const;
+const lists = { components, blocks, charts, calendar, animations, backgrounds, templates, sites, themes, skills } as const;
 
 const DOCS_SECTION_IDS = ["cli", "manual", "prompts", "mcp", "faq"] as const;
 

@@ -31,6 +31,9 @@ export type BackgroundDoc = DocBase & {
 /** What the chart answers: change over time, comparison, part of a whole, spread, flow, money, or the shared kit. */
 export type ChartCat = "kit" | "trend" | "compare" | "part" | "distribution" | "flow" | "finance";
 export type ChartDoc = DocBase & { cat: ChartCat; tags: string[] };
+/** Shared kit, calendar views, holidays, booking, or planning (Gantt and shifts). */
+export type CalendarCat = "kit" | "views" | "occasions" | "booking" | "planning";
+export type CalendarDoc = DocBase & { cat: CalendarCat; tags: string[] };
 export type TemplateDoc = DocBase & { tags: string[]; pages: number };
 export type BlockDoc = DocBase & { tags: string[] };
 /** How a design system looks beyond its palette. Short Persian phrases. */

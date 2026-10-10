@@ -1,26 +1,29 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, ArrowRight, CalendarX2 } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/registry/ui/button";
 import { Stepper } from "@/registry/ui/stepper";
 import { RadioGroup } from "@/registry/ui/radio-group";
-import { Calendar } from "@/registry/ui/calendar";
 import { PhoneInput } from "@/registry/ui/phone-input";
 import { Field, Input } from "@/registry/ui/input";
 import { Textarea } from "@/registry/ui/textarea";
 import { SuccessCheck } from "@/registry/animations/success-check";
+import { SlotPicker, type SlotValue } from "@/registry/calendar/slot-picker";
 import { formatJalali, JALALI_WEEKDAYS, jalaliWeekday } from "@/lib/jalali";
+import { atMinutes, formatTime } from "@/lib/calendar-utils";
 import { cn, fa, faNumber } from "@/lib/utils";
 import { DOCTORS, Photo, SERVICES, Shell, useHref } from "./shell";
 
 const STEPS = [{ label: "خدمت" }, { label: "پزشک و زمان" }, { label: "مشخصات" }];
-const SLOTS = ["۰۹:۰۰", "۰۹:۴۵", "۱۰:۳۰", "۱۱:۱۵", "۱۲:۰۰", "۱۶:۰۰", "۱۶:۴۵", "۱۷:۳۰", "۱۸:۱۵", "۱۹:۰۰", "۱۹:۴۵", "۲۰:۳۰"];
+const HOURS: [string, string][] = [["09:00", "12:45"], ["16:00", "21:15"]];
+const STARTS = [540, 585, 630, 675, 720, 960, 1005, 1050, 1095, 1140, 1185, 1230];
 
-/** Which slots are already taken on a day, stable for the same date. Replace with your API. */
-function takenSlots(date: Date, doctor: string) {
-  const seed = date.getDate() * 7 + date.getMonth() * 3 + doctor.length;
-  return new Set(SLOTS.filter((_, i) => (seed + i * 5) % 4 === 0));
+/** Appointments already booked with a doctor on a day, stable for the same date. Replace with your API. */
+function bookedSlots(key: string, doctor: string) {
+  const [, m, d] = key.split("-").map(Number);
+  const seed = d * 7 + m * 3 + doctor.length;
+  return STARTS.filter((_, i) => (seed + i * 5) % 4 === 0).map((t) => ({ start: atMinutes(key, t), end: atMinutes(key, t + 45) }));
 }
 
 /** نوبت‌دهی سه‌مرحله‌ای با تقویم شمسی و ساعت‌های خالی. */
@@ -29,20 +32,16 @@ export function BookingPage() {
   const [step, setStep] = React.useState(0);
   const [service, setService] = React.useState(SERVICES[0].id);
   const [doctor, setDoctor] = React.useState(DOCTORS[0].id);
-  const [date, setDate] = React.useState<Date | null>(null);
-  const [slot, setSlot] = React.useState<string | null>(null);
+  const [slot, setSlot] = React.useState<SlotValue>(null);
   const [phoneOk, setPhoneOk] = React.useState(false);
   const [name, setName] = React.useState("");
   const [done, setDone] = React.useState<string | null>(null);
 
   const svc = SERVICES.find((s) => s.id === service)!;
   const doc = DOCTORS.find((d) => d.id === doctor)!;
-  const weekday = date ? JALALI_WEEKDAYS[jalaliWeekday(date)] : null;
-  const closed = date ? jalaliWeekday(date) === 6 : false;
-  const off = date && !closed && weekday ? !doc.days.includes(weekday) : false;
-  const taken = date ? takenSlots(date, doctor) : new Set<string>();
+  const when = slot ? `${formatJalali(slot.start, { weekday: true })} ساعت ${formatTime(slot.start)}` : null;
 
-  const canNext = step === 0 ? Boolean(service) : step === 1 ? Boolean(date && slot && !closed && !off) : name.trim().length > 1 && phoneOk;
+  const canNext = step === 0 ? Boolean(service) : step === 1 ? Boolean(slot) : name.trim().length > 1 && phoneOk;
 
   function next() {
     if (step < 2) setStep(step + 1);
@@ -56,7 +55,7 @@ export function BookingPage() {
           <SuccessCheck className="mx-auto" />
           <h1 className="mt-6 text-3xl font-black">نوبتتون ثبت شد</h1>
           <p className="mt-3 leading-8 text-muted-foreground">
-            {svc.name} با {doc.name}، {date && formatJalali(date, { weekday: true })} ساعت {slot}. پیامک یادآوری یک روز قبل براتون می‌آد.
+            {svc.name} با {doc.name}، {when}. پیامک یادآوری یک روز قبل براتون می‌آد.
           </p>
           <p className="mx-auto mt-6 w-fit rounded-xl border border-dashed border-border px-5 py-3 text-sm">
             کد پیگیری: <span dir="ltr" className="font-mono font-bold">{done}</span>
@@ -120,53 +119,21 @@ export function BookingPage() {
                     ))}
                   </div>
                 </fieldset>
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div>
-                    <p className="mb-3 font-bold">روز</p>
-                    <Calendar
-                      value={date}
-                      onChange={(d) => {
-                        setDate(d);
-                        setSlot(null);
-                      }}
-                      min={new Date()}
-                      className="w-full"
-                    />
-                  </div>
-                  <div>
-                    <p className="mb-3 font-bold">ساعت</p>
-                    {!date ? (
-                      <p className="rounded-2xl bg-secondary/60 p-4 text-sm text-muted-foreground">اول یک روز را روی تقویم انتخاب کنید.</p>
-                    ) : closed || off ? (
-                      <div className="flex flex-col items-center rounded-2xl bg-secondary/60 p-6 text-center text-sm">
-                        <CalendarX2 className="size-6 text-muted-foreground" />
-                        <p className="mt-3 font-semibold">{closed ? "جمعه‌ها کلینیک تعطیله" : `${doc.name} ${weekday}ها در کلینیک نیستن`}</p>
-                        <p className="mt-1 text-muted-foreground">یک روز دیگه انتخاب کنید.</p>
-                      </div>
-                    ) : (
-                      <div role="radiogroup" aria-label="ساعت" className="grid grid-cols-3 gap-2">
-                        {SLOTS.map((s) => {
-                          const busy = taken.has(s);
-                          return (
-                            <button
-                              key={s}
-                              type="button"
-                              role="radio"
-                              aria-checked={slot === s}
-                              disabled={busy}
-                              onClick={() => setSlot(s)}
-                              className={cn(
-                                "h-11 cursor-pointer rounded-xl border text-sm tabular-nums transition-colors disabled:cursor-not-allowed disabled:text-muted-foreground/50 disabled:line-through",
-                                slot === s ? "border-foreground bg-foreground text-background" : "border-border hover:bg-secondary",
-                              )}
-                            >
-                              {s}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
+                <div>
+                  <p className="mb-3 font-bold">روز و ساعت</p>
+                  <SlotPicker
+                    key={doctor}
+                    value={slot}
+                    onChange={setSlot}
+                    duration={45}
+                    hours={HOURS}
+                    closedReason={(d) => {
+                      const w = JALALI_WEEKDAYS[jalaliWeekday(d)];
+                      return w !== "جمعه" && !doc.days.includes(w) ? `${doc.name} ${w}‌ها در کلینیک نیستن` : null;
+                    }}
+                    busy={(k) => bookedSlots(k, doctor)}
+                    days={21}
+                  />
                 </div>
               </div>
             )}
@@ -203,8 +170,8 @@ export function BookingPage() {
               {[
                 ["خدمت", svc.name],
                 ["پزشک", step > 0 ? doc.name : "—"],
-                ["روز", date && !closed && !off ? formatJalali(date, { weekday: true }) : "—"],
-                ["ساعت", slot ?? "—"],
+                ["روز", slot ? formatJalali(slot.start, { weekday: true }) : "—"],
+                ["ساعت", slot ? formatTime(slot.start) : "—"],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-3 border-b border-dashed border-border pb-3">
                   <dt className="text-muted-foreground">{k}</dt>
