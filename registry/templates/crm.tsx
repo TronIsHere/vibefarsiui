@@ -13,8 +13,10 @@ import { PhoneInput } from "@/registry/ui/phone-input";
 import { Select } from "@/registry/ui/select";
 import { Stat } from "@/registry/ui/stat";
 import { TagsInput } from "@/registry/ui/tags-input";
+import { AgendaView } from "@/registry/calendar/agenda-view";
 import { fa, faNumber, formatToman } from "@/lib/utils";
 import { formatJalali } from "@/lib/jalali";
+import { addDays, atMinutes, dayKey, type CalendarEvent } from "@/lib/calendar-utils";
 
 type Stage = "lead" | "active" | "vip" | "churn";
 type Customer = {
@@ -46,7 +48,22 @@ const customers: Customer[] = [
   { id: "6", name: "حسین نوری", company: "چاپخانه رنگ", phone: "09125556677", email: "hossein@rang.print", stage: "vip", spend: 72_000_000, last: new Date(Date.now() - 3 * 864e5), tags: ["چاپ", "قرارداد"] },
 ];
 
-/** مدیریت مشتریان: آمار، جدول با مرحله‌ی فروش، برچسب و افزودن مشتری جدید. */
+/** A follow-up `day` days from today at minutes past midnight, Tehran time. */
+function followUp(id: string, day: number, minutes: number, length: number, title: string, color: number, location?: string): CalendarEvent {
+  const key = dayKey(addDays(new Date(), day));
+  return { id, title, start: atMinutes(key, minutes), end: atMinutes(key, minutes + length), color, location };
+}
+
+/** Follow-ups for the coming days. Replace with your tasks API. */
+const followUps: CalendarEvent[] = [
+  followUp("f1", 0, 660, 30, "تماس با سارا محمدی", 1, "تمدید قرارداد عمده"),
+  followUp("f2", 0, 900, 45, "دمو برای استودیو خط", 3, "گوگل میت"),
+  followUp("f3", 1, 600, 30, "پیگیری فاکتور انبار سپهر", 4),
+  followUp("f4", 2, 720, 60, "جلسه با چاپخانه رنگ", 2, "خیابان ولیعصر"),
+  followUp("f5", 4, 570, 30, "تماس با داروخانه سلامت", 5, "مشتری راکد"),
+];
+
+/** مدیریت مشتریان: آمار، جدول با مرحله‌ی فروش، پیگیری‌های این هفته و افزودن مشتری جدید. */
 export function CrmPage() {
   const [stage, setStage] = React.useState("all");
   const [open, setOpen] = React.useState(false);
@@ -145,6 +162,7 @@ export function CrmPage() {
           <Stat label="سرنخ باز" value={fa(customers.filter((c) => c.stage === "lead").length)} className="col-span-2 sm:col-span-1" />
         </div>
 
+        <div className="grid items-start gap-6 lg:grid-cols-[1fr_20rem]">
         <DataTable
           rows={rows}
           columns={columns}
@@ -168,6 +186,11 @@ export function CrmPage() {
             </div>
           }
         />
+          <section className="space-y-3" aria-labelledby="crm-followups">
+            <h2 id="crm-followups" className="text-sm font-bold">پیگیری‌های این هفته</h2>
+            <AgendaView events={followUps} days={7} toolbar={false} />
+          </section>
+        </div>
       </div>
 
       <Dialog
