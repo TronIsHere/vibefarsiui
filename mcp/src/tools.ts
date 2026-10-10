@@ -179,7 +179,7 @@ export function registerTools(server: McpServer) {
     "search_registry",
     {
       description:
-        "Search the VibeFarsi registry (components, charts, blocks, animations, backgrounds, templates, whole multi-page sites, themes, lib helpers, and agent skills such as persian-conversational or jalali-calendar) with Persian or English. Use this instead of guessing shadcn names.",
+        "Search the VibeFarsi registry (components, charts, calendar views and holidays, blocks, animations, backgrounds, templates, whole multi-page sites, themes, lib helpers, and agent skills such as persian-conversational or jalali-calendar) with Persian or English. Use this instead of guessing shadcn names.",
       inputSchema: z.object({
         query: z.string().describe("What you need, e.g. تقویم, otp, toman, dashboard, فیروزه"),
         type: z.enum(REGISTRY_TYPES).optional().describe("Limit to one registry kind."),

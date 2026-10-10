@@ -259,11 +259,16 @@ import { formatToman } from "@/lib/utils"
     desc: "تقویم شمسی با ماه و روز فارسی، جمعه‌های خاکستری و حلقه‌ی امروز، که خروجی‌اش یک Date معمولیه.",
     usage: `import { Calendar } from "@/components/ui/calendar"
 
-<Calendar defaultValue={new Date()} onChange={(d) => console.log(formatJalali(d))} />`,
+<Calendar defaultValue={new Date()} onChange={(d) => console.log(formatJalali(d))} />
+
+// با تعطیلات رسمی ایران
+import { occasionsOn } from "@/lib/iran-holidays"
+<Calendar occasion={(d) => occasionsOn(d).find((o) => o.holiday)?.title ?? null} />`,
     props: [
       { name: "value / defaultValue", type: "Date | null", desc: "تاریخ انتخاب‌شده (Date میلادی معمولی)." },
       { name: "min / max", type: "Date", desc: "روزهای خارج از بازه غیرفعال میشن." },
       { name: "markWeekend", type: "boolean", default: "true", desc: "جمعه‌ها کم‌رنگ." },
+      { name: "occasion", type: "(date) => string | null", desc: "اسم تعطیلی هر روز. روزهای اسم‌دار قرمز میشن و اسمشون با نگه داشتن نشانگر دیده میشه. برای تعطیلات رسمی ایران occasionsOn را از iran-holidays بدید." },
       { name: "compact", type: "boolean", desc: "نسخه‌ی کوچک برای پاپ‌آور." },
     ],
     notes: ["تبدیل تاریخ با الگوریتم جلالی و بدون وابستگی در lib/jalali.ts انجام میشه و سال‌های کبیسه (مثل ۱۴۰۳) درست حساب میشن.", "هفته از شنبه شروع میشه و ستون آخر جمعه‌ست."],

@@ -23,10 +23,11 @@ import {
 } from "@/components/demos/animations";
 import { backgroundDemos } from "@/components/demos/backgrounds";
 import { chartDemos } from "@/components/demos/charts";
+import { calendarDemos } from "@/components/demos/calendar";
 import { blockDemos } from "@/components/demos/blocks";
 
 export type DemoRef = {
-  kind: "component" | "chart" | "animation" | "background" | "template" | "block" | "site";
+  kind: "component" | "chart" | "calendar" | "animation" | "background" | "template" | "block" | "site";
   slug: string;
 };
 
@@ -118,6 +119,8 @@ function renderDemo(
       return backgroundDemos[demo.slug];
     case "chart":
       return chartDemos[demo.slug];
+    case "calendar":
+      return calendarDemos[demo.slug];
     case "block":
       // Desktop stays inline so tall blocks aren't clipped; smaller sizes
       // use an iframe so Tailwind breakpoints match the frame width.

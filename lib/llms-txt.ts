@@ -2,6 +2,7 @@ import {
   animations,
   backgrounds,
   blocks,
+  calendar,
   charts,
   components,
   skills,
@@ -47,6 +48,7 @@ MCP: ${SITE_URL}/mcp  (also \`npx -y @vibefarsi/mcp\`)
 - ${components.length} components
 - ${blocks.length} blocks
 - ${charts.length} charts
+- ${calendar.length} calendar components (events, Iranian holidays, booking, Gantt, shifts)
 - ${animations.length} animations
 - ${backgrounds.length} backgrounds
 - ${templates.length} templates
@@ -60,6 +62,7 @@ MCP: ${SITE_URL}/mcp  (also \`npx -y @vibefarsi/mcp\`)
 - Components: ${SITE_URL}/components
 - Blocks: ${SITE_URL}/blocks
 - Charts: ${SITE_URL}/charts
+- Calendar: ${SITE_URL}/calendar
 - Animations: ${SITE_URL}/animations
 - Backgrounds: ${SITE_URL}/backgrounds
 - Templates: ${SITE_URL}/templates
@@ -79,6 +82,9 @@ ${list(blocks, "/blocks")}
 
 ## Charts
 ${list(charts, "/charts")}
+
+## Calendar
+${list(calendar, "/calendar")}
 
 ## Animations
 ${list(animations, "/animations")}

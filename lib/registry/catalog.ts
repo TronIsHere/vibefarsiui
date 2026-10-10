@@ -1,6 +1,7 @@
 import { animations } from "./animations";
 import { backgrounds } from "./backgrounds";
 import { charts } from "./charts";
+import { calendar } from "./calendar";
 import { blocks } from "./blocks";
 import { components } from "./components";
 import { libs } from "./libs";
@@ -11,7 +12,7 @@ import { hostedSkills, skillTarget } from "./skills";
 import { themes } from "./themes";
 import type { DocBase, SiteDoc, SkillDoc, ThemeDoc } from "./types";
 
-export const REGISTRY_TYPES = ["component", "chart", "animation", "background", "template", "block", "site", "theme", "lib", "skill"] as const;
+export const REGISTRY_TYPES = ["component", "chart", "calendar", "animation", "background", "template", "block", "site", "theme", "lib", "skill"] as const;
 export type RegistryType = (typeof REGISTRY_TYPES)[number];
 
 export type CatalogItem = {
@@ -164,6 +165,20 @@ export const EXTRA_ALIASES: Record<string, string[]> = {
   "function-plot": ["graph", "plot", "math", "نمودار تابع", "نمودار تعاملی", "ریاضی", "فیزیک", "سینوس", "interactive chart"],
   "hotspot-figure": ["hotspot", "diagram", "labeled image", "شکل", "شکل تعاملی", "دیاگرام", "نقطه", "برچسب تصویر"],
   quiz: ["assessment", "exam", "test", "mcq", "ارزیابی", "آزمون", "آزمونک", "امتحان", "تست", "چهارگزینه‌ای", "چندگزینه‌ای"],
+  // calendar
+  "calendar-core": ["calendar core", "هسته تقویم", "تعطیلات", "holidays"],
+  "event-calendar": ["calendar", "events", "google calendar", "big calendar", "full calendar", "تقویم", "تقویم رویداد", "رویدادها", "برنامه"],
+  "month-view": ["month", "ماه", "نمای ماهانه", "تقویم ماهانه"],
+  "time-grid": ["week view", "day view", "هفته", "روز", "برنامه هفتگی", "schedule"],
+  "agenda-view": ["agenda", "upcoming", "فهرست رویداد", "دستور کار", "برنامه امروز"],
+  "year-view": ["year", "سال", "تقویم سالانه", "تقویم ۱۴۰۵", "تعطیلات سال"],
+  "occasions-list": ["occasions", "holidays", "مناسبت", "مناسبت‌ها", "تعطیلات رسمی", "تعطیلی", "قمری", "هجری قمری", "hijri"],
+  "slot-picker": ["booking", "appointment", "time slots", "نوبت", "نوبت دهی", "نوبت‌دهی", "رزرو", "وقت", "ساعت خالی"],
+  "gantt-chart": ["gantt", "timeline", "project plan", "گانت", "برنامه پروژه", "زمان‌بندی", "مدیریت پروژه"],
+  "shift-scheduler": ["shifts", "roster", "rota", "شیفت", "برنامه شیفت", "شیفت‌بندی", "پرستار", "کارمند"],
+  "calendar-utils": ["calendar math", "منطقه زمانی", "تهران", "time zone"],
+  "iran-holidays": ["holidays", "تعطیلات رسمی", "مناسبت", "نوروز", "عاشورا", "عید فطر"],
+  hijri: ["hijri", "islamic calendar", "قمری", "هجری قمری", "ماه قمری"],
   // sites
   "agency-site": ["agency", "studio", "portfolio", "آژانس", "استودیو", "سایت شرکتی", "نمونه کار", "full website"],
   "saas-site": ["saas", "startup website", "سایت استارتاپ", "نرم افزار", "حسابداری", "landing multi page"],
@@ -184,6 +199,7 @@ function targetFor(type: RegistryType, file: string): string {
   if (type === "animation") return `components/animations/${name}`;
   if (type === "background") return `components/backgrounds/${name}`;
   if (type === "chart") return `components/charts/${name}`;
+  if (type === "calendar") return `components/calendar/${name}`;
   if (type === "template") return `components/templates/${name}`;
   if (type === "block") return `components/blocks/${name}`;
   if (type === "theme") return "app/globals.css";
@@ -272,6 +288,7 @@ export function buildCatalog(homepage = "https://vibefarsi.ir"): Catalog {
     ...libs.map((i) => fromDoc("lib", i)),
     ...components.map((i) => fromDoc("component", i, { category: i.cat, tags: [i.cat] })),
     ...charts.map((i) => fromDoc("chart", i, { category: i.cat, tags: [i.cat, ...i.tags] })),
+    ...calendar.map((i) => fromDoc("calendar", i, { category: i.cat, tags: [i.cat, ...i.tags] })),
     ...animations.map((i) => fromDoc("animation", i)),
     ...backgrounds.map((i) => fromDoc("background", i, { tags: i.engine ? ["webgl", "shader", "شیدر"] : [] })),
     ...templates.map((i) => fromDoc("template", i, { tags: i.tags })),
