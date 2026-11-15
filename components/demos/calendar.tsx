@@ -13,6 +13,7 @@ import { OccasionsList } from "@/registry/calendar/occasions-list";
 import { SlotPicker, type SlotValue } from "@/registry/calendar/slot-picker";
 import { GanttChart, type GanttTask } from "@/registry/calendar/gantt-chart";
 import { ShiftScheduler, type Shift } from "@/registry/calendar/shift-scheduler";
+import { extraCalendarCardDemos, extraCalendarDemos } from "@/components/demos/calendar-extra";
 import { CalendarToolbar, DayNumber, OccasionLine, WeekdayHeader, dayInfo, useCalendar, useToday } from "@/registry/calendar/calendar-core";
 
 /* ---------- sample data, built around this week so it always looks current ---------- */
@@ -184,6 +185,7 @@ export const calendarDemos: Record<string, React.ReactNode> = {
   "slot-picker": <SlotDemo />,
   "gantt-chart": <GanttDemo />,
   "shift-scheduler": <ShiftDemo />,
+  ...extraCalendarDemos,
 };
 
 /* ---------- card previews: the real components, scaled down ---------- */
@@ -249,4 +251,5 @@ export const calendarCardDemos: Record<string, React.ReactNode> = {
       <ShiftScheduler resources={staff} defaultShifts={sampleShifts} />
     </Mini>
   ),
+  ...extraCalendarCardDemos,
 };

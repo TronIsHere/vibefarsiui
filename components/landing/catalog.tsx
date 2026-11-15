@@ -35,7 +35,7 @@ export function Catalog({ standalone }: { standalone?: boolean }) {
   );
 
   const sponsors = !standalone && active === "all" ? goldSponsors : [];
-  const spans = fillGrid([...sponsors.map(() => 1), ...visible.map((it) => (it.wide ? 2 : 1))], standalone ? { base: 1, sm: 2, xl: 3 } : { base: 1, sm: 2, xl: 4 });
+  const spans = fillGrid([...sponsors.map(() => 1), ...visible.map((it) => (it.wide === "full" ? 4 : it.wide ? 2 : 1))], standalone ? { base: 1, sm: 2, xl: 3 } : { base: 1, sm: 2, xl: 4 });
   const grid = (
     <ul className={cn("grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4", standalone ? "xl:grid-cols-3" : "p-3 sm:p-4 xl:grid-cols-4")}>
       {sponsors.map((sponsor, i) => (
@@ -47,7 +47,7 @@ export function Catalog({ standalone }: { standalone?: boolean }) {
         <li key={it.slug} className={spans[sponsors.length + i]}>
           <ItemCard href={`/components/${it.slug}`} name={it.name} slug={it.slug} desc={it.desc}>
             <div className="flex w-full min-w-0 items-center justify-center">
-              {(standalone ? componentDemos : componentCardDemos)[it.slug]}
+              {(standalone && !it.compactCard ? componentDemos : componentCardDemos)[it.slug]}
             </div>
           </ItemCard>
         </li>

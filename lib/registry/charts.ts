@@ -477,6 +477,86 @@ const data = [
     notes: ["اسپارک‌لاین‌ها فوکوس‌پذیر نیستن و فقط یک aria-label خلاصه دارن، چون کنار عدد اصلی کارت می‌شینن."],
     promptBullets: ["No axes; oldest value on the right, last value marked with a dot on the left end.", "role=img with an aria-label summarising first → last and the percentage change."],
   },
+  {
+    slug: "bullet-chart",
+    name: "نمودار گلوله‌ای",
+    cat: "compare",
+    tags: ["bullet", "kpi", "target", "goal"],
+    file: ch("bullet-chart"),
+    registryDeps: DEPS,
+    desc: "شاخص‌های کلیدی در برابر هدف، هر کدام یک میله‌ی باریک روی سه بازه‌ی ضعیف، قابل قبول و خوب، با خط هدف. جای کمی می‌گیره و برای داشبورد عالیه.",
+    usage: `import { BulletChart } from "@/components/charts/bullet-chart"
+
+<BulletChart
+  title="عملکرد فصل پاییز"
+  data={[
+    { label: "فروش", sublabel: "میلیون تومان", value: 2_750, target: 3_000, ranges: [1_800, 2_600, 3_400] },
+    { label: "سفارش جدید", value: 1_240, target: 1_100, ranges: [700, 1_000, 1_500] },
+  ]}
+/>`,
+    props: [
+      { name: "data", type: "{ label; sublabel?; value; target?; ranges?; max? }[]", desc: "ranges لبه‌های بازه‌ها از ضعیف به خوب است و آخری سقف مقیاس میشه." },
+      { name: "rangeLabels", type: "string[]", default: '["ضعیف", "قابل قبول", "خوب"]', desc: "اسم بازه‌ها در تولتیپ." },
+    ],
+    notes: ["هر ردیف مقیاس خودش را داره، پس فروش میلیاردی و نرخ تبدیل درصدی کنار هم درست دیده میشن."],
+    promptBullets: ["Per-row scale; qualitative bands as stacked rects darkest at the poor end; the measure as a thin bar growing leftward from the label column; target as a 3px vertical tick.", "Tooltip with value, target, percent of target and the band name; rows dim when another is active."],
+  },
+  {
+    slug: "sankey-chart",
+    name: "نمودار سنکی",
+    cat: "flow",
+    tags: ["sankey", "flow", "budget", "traffic"],
+    file: ch("sankey-chart"),
+    registryDeps: DEPS,
+    desc: "جریان بین مرحله‌ها، مثل منبع ورود به صفحه و نتیجه یا بودجه به بخش و هزینه. منبع‌ها سمت راست هستن و جریان مثل متن به چپ میره.",
+    usage: `import { SankeyChart } from "@/components/charts/sankey-chart"
+
+<SankeyChart
+  title="مسیر خرید"
+  nodes={[{ id: "google", label: "گوگل" }, { id: "insta", label: "اینستاگرام" }, { id: "product", label: "صفحه‌ی محصول" }, { id: "buy", label: "خرید" }, { id: "exit", label: "خروج" }]}
+  links={[
+    { source: "google", target: "product", value: 5200 },
+    { source: "insta", target: "product", value: 3100 },
+    { source: "product", target: "buy", value: 1400 },
+    { source: "product", target: "exit", value: 6900 },
+  ]}
+/>`,
+    props: [
+      { name: "nodes", type: "{ id; label; color? }[]", desc: "گره‌ها. ستون هر گره از طولانی‌ترین مسیرش تا یک منبع حساب میشه." },
+      { name: "links", type: "{ source; target; value }[]", desc: "جریان‌ها. پهنای هر نوار با value متناسبه." },
+      { name: "nodePadding / nodeWidth", type: "number", default: "14 / 12", desc: "فاصله‌ی گره‌های یک ستون و ضخامت هر گره." },
+    ],
+    notes: ["چیدمان بدون کتابخانه و ساده‌ست و برای نمودارهای تا حدود ۲۰ گره خوب جواب میده. برای شبکه‌های خیلی بزرگ d3-sankey دقیق‌تره."],
+    promptBullets: ["Node column = longest path from a source; sources at the right edge and later columns leftward; nodes stacked per column with padding and a shared value scale.", "Links are cubic bezier strokes as wide as their value, colored by source, ordered by the far end to reduce crossings; hover and arrow keys highlight one link."],
+  },
+  {
+    slug: "iran-map-chart",
+    name: "نقشه‌ی استان‌ها",
+    cat: "distribution",
+    tags: ["map", "iran", "province", "choropleth"],
+    file: ch("iran-map-chart"),
+    registryDeps: DEPS,
+    desc: "نقشه‌ی کاشی‌ای ۳۱ استان ایران که هر استان به اندازه‌ی عددش پررنگ میشه، با راهنمای پله‌ای، تولتیپ، کیبورد و جدول مخفی. استان بدون داده هاشور می‌خوره، نه صفر.",
+    usage: `import { IranMapChart } from "@/components/charts/iran-map-chart"
+
+<IranMapChart
+  title="سفارش‌ها به تفکیک استان"
+  unit="سفارش"
+  data={[{ province: "تهران", value: 18_420 }, { province: "اصفهان", value: 6_310 }, { province: "خراسان رضوی", value: 5_870 }]}
+  onSelect={(province) => setFilter(province)}
+/>`,
+    props: [
+      { name: "data", type: "{ province; value }[]", desc: "اسم استان دقیقاً مثل فهرست iran-divisions، مثلاً «خراسان رضوی» یا «چهارمحال و بختیاری»." },
+      { name: "steps", type: "number", default: "5", desc: "تعداد پله‌های رنگ." },
+      { name: "onSelect", type: "(province, value) => void", desc: "با کلیک یا Enter روی استان صدا زده میشه." },
+    ],
+    notes: [
+      "چرا کاشی و نه مرز واقعی؟ چون در نقشه‌ی مرزی استان‌های بزرگ مثل کرمان و سیستان چشم را می‌گیرن و تهران با بیشترین عدد یک نقطه میشه. در نقشه‌ی کاشی همه هم‌اندازه‌ان و فقط عدد دیده میشه.",
+      "جهت نقشه هیچ‌وقت آینه نمیشه و شرق همیشه سمت راسته، حتی در صفحه‌ی راست‌چین.",
+      "جای کاشی‌ها در IRAN_TILES است و اگه چیدمان دیگه‌ای خواستید همون را عوض کنید.",
+    ],
+    promptBullets: ["31 equal tiles on a 7×5 grid placed near each province's real position (IRAN_TILES); geography is never mirrored, so the grid is dir=ltr while labels inside stay rtl.", "Equal-interval color steps mixed from --chart-1 into the card color; a stepped legend plus a hatched «بدون داده» swatch; short names when tiles are narrow.", "Keyboard visits provinces north to south and east to west (reading order); Enter selects; sr-only table lists all 31 with value and share."],
+  },
 ];
 
 /** Grouped in the order of `chartCats`, so the sidebar and prev/next follow the index page. */

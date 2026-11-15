@@ -140,6 +140,7 @@ export const EXTRA_ALIASES: Record<string, string[]> = {
   turquoise: ["glass", "glassmorphism", "شیشه‌ای", "گلس", "frosted"],
   lapis: ["terminal", "dev tool", "developer", "ترمینال", "فشرده"],
   "national-id-input": ["national id", "کد ملی", "کدملی", "شماره ملی", "melli code"],
+  "card-to-card": ["card to card", "کارت به کارت", "کارت‌به‌کارت", "bank card", "کارت بانکی", "شبا", "پرداخت", "payment", "credit card", "ملت", "ملی"],
   "card-number-input": ["card number", "شماره کارت", "کارت بانکی", "bank card", "bin", "شماره‌ی کارت"],
   "plate-input": ["plate", "پلاک", "پلاک خودرو", "license plate", "ماشین", "خودرو"],
   "address-picker": ["address", "آدرس", "نشانی", "استان", "شهر", "province", "city", "استان و شهر", "شهرستان"],

@@ -250,3 +250,79 @@ export function timeAgo(date: Date, now = new Date()): string {
   const mo = Math.round(d / 30);
   return mo < 12 ? `${fa(mo)} ماه پیش` : `${fa(Math.round(mo / 12))} سال پیش`;
 }
+
+/* ---------- شناسه ملی (legal entities) ---------- */
+
+/** Digits only, capped at 11. */
+export function normalizeLegalId(input: string): string {
+  return en(input).replace(/\D/g, "").slice(0, 11);
+}
+
+/** شناسه‌ی ملی اشخاص حقوقی: 11 digits, the last one a check digit over the first ten. */
+export function isLegalId(input: string): boolean {
+  const d = en(input).replace(/\D/g, "");
+  if (!/^\d{11}$/.test(d) || /^(\d)\1{10}$/.test(d)) return false;
+  const tenth = Number(d[9]) + 2;
+  const weights = [29, 27, 23, 19, 17, 29, 27, 23, 19, 17];
+  const sum = weights.reduce((s, w, i) => s + (Number(d[i]) + tenth) * w, 0);
+  const r = sum % 11;
+  return Number(d[10]) === (r === 10 ? 0 : r);
+}
+
+/* ---------- قبض (bill and payment ids) ---------- */
+
+/** Check digit used by both bill ids: weights 2..7 from the right, modulo 11. */
+function billCheckDigit(digits: string): number {
+  let sum = 0;
+  for (let i = digits.length - 1, w = 2; i >= 0; i--, w = w === 7 ? 2 : w + 1) sum += Number(digits[i]) * w;
+  const r = sum % 11;
+  return r < 2 ? 0 : 11 - r;
+}
+
+/** Digits only, capped at 13 (the longest bill or payment id). */
+export function normalizeBillId(input: string): string {
+  return en(input).replace(/\D/g, "").slice(0, 13);
+}
+
+/** شناسه‌ی قبض: 6 to 13 digits ending in a check digit. */
+export function isBillId(input: string): boolean {
+  const d = normalizeBillId(input);
+  if (d.length < 6) return false;
+  return billCheckDigit(d.slice(0, -1)) === Number(d[d.length - 1]);
+}
+
+export const BILL_TYPES: Record<string, string> = {
+  "1": "آب",
+  "2": "برق",
+  "3": "گاز",
+  "4": "تلفن ثابت",
+  "5": "تلفن همراه",
+  "6": "عوارض شهرداری",
+  "8": "مالیات",
+  "9": "جریمه‌ی رانندگی",
+};
+
+/** Kind of bill from the digit before the check digit: «برق», «گاز», … or null. */
+export function billType(billId: string): string | null {
+  const d = normalizeBillId(billId);
+  return d.length >= 6 ? BILL_TYPES[d[d.length - 2]] ?? null : null;
+}
+
+/**
+ * شناسه‌ی پرداخت: 6 to 13 digits. The digit before last checks the payment id itself,
+ * and the last digit checks the bill id and the payment id together.
+ */
+export function isPaymentId(billId: string, paymentId: string): boolean {
+  const bill = normalizeBillId(billId);
+  const pay = normalizeBillId(paymentId);
+  if (pay.length < 6 || !isBillId(bill)) return false;
+  const first = billCheckDigit(pay.slice(0, -2)) === Number(pay[pay.length - 2]);
+  const second = billCheckDigit(bill + pay.slice(0, -1)) === Number(pay[pay.length - 1]);
+  return first && second;
+}
+
+/** Bill amount in rial: the payment id without its last five digits, times 1000. */
+export function billAmountRial(paymentId: string): number {
+  const pay = normalizeBillId(paymentId);
+  return pay.length > 5 ? Number(pay.slice(0, -5)) * 1000 : 0;
+}

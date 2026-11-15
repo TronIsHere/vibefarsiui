@@ -24,6 +24,7 @@ import { ComparisonTable } from "@/registry/blocks/comparison";
 import { DashboardStats } from "@/registry/blocks/dashboard-stats";
 import { SignupCard } from "@/registry/blocks/signup-card";
 import { FooterBlock } from "@/registry/blocks/footer";
+import { extraBlockDemos } from "./blocks-extra";
 
 /** Faint page lines under thin bars (navbar, banner) so their previews read as a page. */
 const ghostPage = (
@@ -207,6 +208,7 @@ export const blockDemos: Record<string, React.ReactNode> = {
       seals={<><span className="flex size-14 items-center justify-center rounded-lg border border-dashed border-border text-[10px] text-muted-foreground">نماد</span><span className="flex size-14 items-center justify-center rounded-lg border border-dashed border-border text-[10px] text-muted-foreground">ساماندهی</span></>}
     />
   ),
+  ...extraBlockDemos,
 };
 
 export function BlockDemo({ slug }: { slug: string }) {

@@ -1,4 +1,5 @@
 import type { ComponentCat, ComponentDoc } from "./types";
+import { extraComponents } from "./components-extra";
 
 export const componentCats: { key: ComponentCat | "all"; label: string }[] = [
   { key: "all", label: "همه" },
@@ -9,6 +10,7 @@ export const componentCats: { key: ComponentCat | "all"; label: string }[] = [
   { key: "nav", label: "ناوبری" },
   { key: "data", label: "داده و نمودار" },
   { key: "education", label: "آموزشی" },
+  { key: "ai", label: "هوش مصنوعی" },
 ];
 
 const ui = (slug: string) => `registry/ui/${slug}.tsx`;
@@ -632,7 +634,7 @@ toast({ title: "تغییرات ذخیره شد", variant: "success", action: { l
     promptBullets: ["dir=\"ltr\" on the container so «⌘ K» reads in the right order; mono font and a 1px bottom shadow."],
   },
   {
-    slug: "prompt-input", name: "جعبه‌ی پرامپت", cat: "form", file: ui("prompt-input"), wide: true, deps: ["lucide-react"],
+    slug: "prompt-input", name: "جعبه‌ی پرامپت", cat: "ai", file: ui("prompt-input"), wide: true, deps: ["lucide-react"],
     desc: "ورودی چت هوش مصنوعی با قابلیت بزرگ شدن، پیوست، انتخاب مدل و دکمه‌ی ارسال/توقف.",
     usage: `import { PromptInput } from "@/components/ui/prompt-input"
 
@@ -840,6 +842,48 @@ const form = useForm({
     ],
     notes: ["جدول پیش‌شماره‌ها در lib/persian.ts هست و بانک‌های ادغام‌شده (انصار، قوامین، حکمت، مهر اقتصاد، کوثر) زیر نام سپه می‌آن.", "autoComplete=\"cc-number\" را نگه دارید تا مرورگر کارت ذخیره‌شده را پیشنهاد کند."],
     promptBullets: ["dir=ltr field; Persian digits grouped in fours; inputMode=numeric and autoComplete=cc-number.", "Bank name from the first six digits (BIN table for Iranian banks) shown under the field with a bank icon; Luhn error only when all 16 digits are in."],
+  },
+  {
+    slug: "card-to-card", name: "کارت به کارت", cat: "display", file: ui("card-to-card"), deps: ["lucide-react"], registryDeps: ["persian", "button"],
+    desc: "کارت بانکی که از شش رقم اول می‌فهمه مال کدوم بانکه و با رنگ و طرح همون بانک نشون داده میشه، به‌همراه کپی شماره‌ی کارت، شبا و مبلغ برای پرداخت کارت به کارت.",
+    usage: `import { CardToCard, BankCard } from "@/components/ui/card-to-card"
+
+// صفحه‌ی پرداخت سفارش:
+<CardToCard
+  number="6104337912345673"
+  holder="سارا محمدی"
+  sheba="IR160120000000001234567890"
+  amount={480000}
+/>
+
+// فقط خود کارت، مثلاً در فهرست کارت‌های ذخیره‌شده:
+<BankCard number="6037991234567893" holder="سارا محمدی" expiry="1408/05" masked />`,
+    props: [
+      { name: "number", type: "string", desc: "شماره‌ی کارت با رقم فارسی یا لاتین. بانک از شش رقم اولش تشخیص داده میشه." },
+      { name: "holder", type: "string", desc: "اسم صاحب کارت. در CardToCard یک یادآوری هم کنارش میاد که اسم را در اپ بانک چک کنن." },
+      { name: "bank", type: "string", desc: "اگه بخواید بانک را دستی تعیین کنید، مثلاً «ملت». کلیدها همون اسم‌هایی هستن که cardBank برمی‌گردونه." },
+      { name: "expiry", type: "string", desc: "تاریخ انقضا همون‌طور که روی کارت چاپ شده، مثلاً «1408/05»." },
+      { name: "masked", type: "boolean", desc: "فقط در BankCard. شش رقم وسط را با • می‌پوشونه." },
+      { name: "sheba", type: "string", desc: "شماره‌ی شبا که مثل کارت‌های واقعی بالای شماره‌ی کارت چاپ میشه. در CardToCard یک ردیف کپی هم براش میاد." },
+      { name: "logo", type: "ReactNode", desc: "لوگوی بانک که کنار اسمش میاد. خود کامپوننت لوگو نداره." },
+      { name: "image", type: "string", desc: "آدرس عکس روی کارت، اگه طرح اصلی کارت را دارید. جای طرح کشیده‌شده را می‌گیره." },
+      { name: "ink", type: "string", desc: "رنگ متن‌ها وقتی image می‌دید، مثلاً \"#000\" برای عکس‌های روشن." },
+      { name: "amount", type: "number", desc: "فقط در CardToCard. مبلغ به تومان با دکمه‌ی کپی." },
+      { name: "onCopy", type: "(field, value) => void", desc: "بعد از هر کپی صدا زده میشه. field یکی از card و sheba و amount هست." },
+    ],
+    notes: [
+      "طرح هر بانک از روی کارت واقعیش کشیده شده، مثل موج قرمز ملت، دماوند ملی، ابرهای رسالت و مشکی و طلایی پاسارگاد. همه با CSS و SVG ساخته شدن و هیچ عکسی دانلود نمیشه.",
+      "لوگوی بانک‌ها علامت تجاری خودشون هست و برای همین داخل کامپوننت نیست. اگه اجازه‌ی استفاده دارید از logo استفاده کنید، یا با image عکس کامل کارت را بدید.",
+      "برای عوض کردن رنگ یا طرح یک بانک کافیه BANK_CARD_STYLES را ویرایش کنید.",
+      "کارت‌هایی که بانکشون شناخته نشه طرح خنثی‌ی خاکستری می‌گیرن.",
+      "همه‌ی متن‌های روی کارت با واحد cqw اندازه می‌گیرن، پس کارت در هر عرضی که بگذارید درست دیده میشه.",
+      "چیزی که کپی میشه رقم لاتین بدون فاصله‌ست چون همه‌ی اپ‌های بانکی قبولش می‌کنن.",
+    ],
+    promptBullets: [
+      "BankCard: ID-1 ratio (1.586:1), dir=rtl, bank detected from the first six digits (Iranian BIN table) and drawn after that bank's real card (Mellat gold with a red swoosh, Melli sky and Damavand, Resalat clouds, Pasargad black and gold, …) in CSS/SVG, no logos. Layout like real Shetab cards: bank name top-right, silver chip left, IBAN line above the LTR card number in Persian digits, holder under it on the right and «تاریخ انقضا» on the left; sizes in cqw so it scales with its container.",
+      "CardToCard: the card, a hint to check the holder's name in the banking app, copy rows for IBAN and amount, and a full-width «کپی شماره‌ی کارت» button that copies Latin digits and shows a check for ~1.5s.",
+      "The card face is the one exception to theme-token colors: it uses each bank's own brand colors so the card is recognisable. The panel around it uses theme tokens.",
+    ],
   },
   {
     slug: "plate-input", name: "پلاک خودرو", cat: "form", file: ui("plate-input"), registryDeps: ["persian"],
@@ -1216,7 +1260,7 @@ const launch = new Date("2026-10-01T12:00:00+03:30")
     ],
   },
   {
-    slug: "lesson-note", name: "درس‌نامه", cat: "education", file: ui("lesson-note"), deps: ["lucide-react"],
+    slug: "lesson-note", name: "درس‌نامه", cat: "education", file: ui("lesson-note"), compactCard: true, deps: ["lucide-react"],
     desc: "قالب درس‌نامه‌ی متنی با اهداف یادگیری و زمان مطالعه، کادرهای نکته، تعریف، مثال و اشتباه رایج، فرمول چپ‌به‌راست و واژه‌نامه.",
     usage: `import { LessonNote, Callout, Formula, KeyTerms } from "@/components/ui/lesson-note"
 
@@ -1251,7 +1295,7 @@ const launch = new Date("2026-10-01T12:00:00+03:30")
     ],
   },
   {
-    slug: "function-plot", name: "نمودار تعاملی", cat: "education", file: ui("function-plot"), wide: true, deps: ["lucide-react"], registryDeps: ["slider"],
+    slug: "function-plot", name: "نمودار تعاملی", cat: "education", file: ui("function-plot"), deps: ["lucide-react"], registryDeps: ["slider"],
     desc: "نمودار تابع با اسلایدر برای هر پارامتر، فرمول زنده، ردیاب مختصات و منحنی خط‌چین حالت اول برای مقایسه؛ برای درس ریاضی و فیزیک.",
     usage: `import { FunctionPlot, faDecimal } from "@/components/ui/function-plot"
 
@@ -1371,4 +1415,5 @@ const launch = new Date("2026-10-01T12:00:00+03:30")
       "Result: percent ring (success if ≥ passPercent else warning), «قبول شدید / نیاز به مرور دارید», per-question review with the right letter, retry button.",
     ],
   },
+  ...extraComponents,
 ];

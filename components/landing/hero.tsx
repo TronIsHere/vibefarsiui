@@ -4,6 +4,8 @@ import { WordRotate } from "@/registry/animations/word-rotate";
 import { GridBackground } from "@/registry/backgrounds/grid";
 import { Section } from "./frame";
 import { HeroMobileStrip, HeroOrbit } from "./hero-orbit";
+import { RELEASE, whatsNewTotal } from "@/lib/registry/whats-new";
+import { fa } from "@/lib/utils";
 
 export function Hero() {
   return (
@@ -15,10 +17,14 @@ export function Hero() {
       <HeroOrbit>
         <div className="mx-auto flex max-w-[30rem] flex-col items-center px-5 pb-10 pt-16 text-center sm:max-w-2xl sm:pt-20 lg:min-h-[780px] lg:max-w-[30rem] lg:justify-center lg:py-0 xl:max-w-[34rem]">
           <div className="animate-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11.5px] text-muted-foreground">
+            <Link
+              href="#new"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11.5px] text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+            >
               <span className="size-1.5 animate-pulse-soft rounded-full bg-brand" />
-              v1 · رایگان و متن‌باز
-            </span>
+              <span dir="ltr">{RELEASE.version}</span> · {fa(whatsNewTotal)} آیتم تازه، رایگان و متن‌باز
+              <ArrowLeft className="size-3" />
+            </Link>
           </div>
 
           <h1

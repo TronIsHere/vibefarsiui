@@ -1,16 +1,18 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Marquee } from "@/registry/animations/marquee";
-import { animations, backgrounds, blocks, components, templates, themes } from "@/lib/registry";
+import { animations, backgrounds, blocks, calendar, charts, components, templates, themes } from "@/lib/registry";
 import { Section } from "./frame";
 import { HeroStats } from "./hero-stats";
 
 const facts = [
   { v: components.length, l: "کامپوننت" },
   { v: blocks.length, l: "بلاک" },
+  { v: templates.length, l: "قالب" },
+  { v: charts.length, l: "نمودار" },
+  { v: calendar.length, l: "تقویم" },
   { v: animations.length, l: "انیمیشن" },
   { v: backgrounds.length, l: "پس‌زمینه" },
-  { v: templates.length, l: "قالب" },
   { v: themes.length, l: "سیستم طراحی" },
 ];
 

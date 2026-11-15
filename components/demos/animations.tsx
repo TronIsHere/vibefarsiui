@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import {
+  ArrowLeft,
   Bell,
   Calendar,
   Check,
@@ -86,10 +87,66 @@ import { ReasoningStream } from "@/registry/animations/reasoning-stream";
 import { StreamingText } from "@/registry/animations/streaming-text";
 import { MatrixLoader } from "@/registry/animations/matrix-loader";
 import { BannerStack, type StackBanner } from "@/registry/animations/banner-stack";
+import { LineRise } from "@/registry/animations/line-rise";
+import { ScrollFillText } from "@/registry/animations/scroll-fill-text";
+import { GlitchText } from "@/registry/animations/glitch-text";
+import { ImageReveal } from "@/registry/animations/image-reveal";
+import { KenBurns } from "@/registry/animations/ken-burns";
+import { ImageTrail } from "@/registry/animations/image-trail";
+import { ImageLens } from "@/registry/animations/image-lens";
+import { FillButton } from "@/registry/animations/fill-button";
+import { RollButton } from "@/registry/animations/roll-button";
+import { CursorRing } from "@/registry/animations/cursor-ring";
+import { HeroIntro } from "@/registry/animations/hero-intro";
+import { HeroParallax } from "@/registry/animations/hero-parallax";
 import { Input } from "@/registry/ui/input";
 import { SkeletonRow } from "@/registry/ui/skeleton";
 import { Avatar } from "@/registry/ui/avatar";
 import { cn, fa, faNumber } from "@/lib/utils";
+
+const LODGE = ["hero", "room-badgir", "stars", "camel", "room-hoz", "sand"].map((n) => `/sites/lodge-site/${n}.webp`);
+
+function ScrollFillDemo() {
+  const box = React.useRef<HTMLDivElement>(null);
+  return (
+    <div ref={box} className="relative h-44 w-full max-w-md overflow-y-auto rounded-xl border border-border bg-card px-5 [scrollbar-width:thin]">
+      <p className="sticky top-0 bg-card/90 py-2 text-center text-[11px] text-muted-foreground backdrop-blur">این کادر را اسکرول کنید</p>
+      <div className="h-24" />
+      <ScrollFillText
+        scrollRef={box}
+        className="text-lg font-bold"
+        text="ما باور داریم ابزار خوب باید زبان کاربرش را بفهمد؛ از جهت نوشتن تا تقویم و اعداد. هر کامپوننت این‌جا از روز اول برای فارسی ساخته شده است."
+      />
+      <div className="h-32" />
+    </div>
+  );
+}
+
+function HeroParallaxDemo() {
+  const chip = "flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-xs font-medium shadow-lg";
+  const photo = (src: string, w: string) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt="" className={cn("aspect-[4/5] rounded-xl border-4 border-card object-cover shadow-xl", w)} />
+  );
+  return (
+    <HeroParallax
+      className="h-80 w-full rounded-xl border border-border bg-muted/40"
+      layers={[
+        { node: photo(LODGE[0], "w-24"), depth: 1.3, className: "top-5 start-6", tilt: -7 },
+        { node: photo(LODGE[2], "w-20"), depth: 0.8, className: "bottom-6 end-8", tilt: 6 },
+        { node: photo(LODGE[1], "w-16"), depth: -0.6, className: "top-8 end-16 opacity-80", tilt: 4 },
+        { node: <div className={chip}><Check className="size-3.5 text-success" />رزرو قطعی شد</div>, depth: 0.5, className: "bottom-10 start-10" },
+        { node: <div className={chip}><Calendar className="size-3.5" />{fa(3)} شب، از {fa(12)} فروردین</div>, depth: 1, className: "top-4 start-[34%] hidden sm:block" },
+      ]}
+    >
+      <div className="px-6 text-center">
+        <p className="text-xs text-muted-foreground">اقامتگاه بومی</p>
+        <h3 className="mt-1 text-3xl font-black">یک شب زیر آسمان کویر</h3>
+        <Button size="sm" className="mt-4">رزرو کنید</Button>
+      </div>
+    </HeroParallax>
+  );
+}
 
 function OdometerDemo() {
   const prices = [12_450_000, 12_980_000, 9_870_000, 13_120_000];
@@ -655,6 +712,87 @@ export const animationDemos: Record<string, (k: number) => React.ReactNode> = {
     </div>
   ),
   "banner-stack": () => <BannerStackDemo />,
+  "line-rise": (k) => (
+    <LineRise key={k} as="h3" className="text-center text-3xl font-black leading-tight" lines={["طراحی که دیده می‌شود،", "کدی که می‌ماند."]} />
+  ),
+  "scroll-fill-text": () => <ScrollFillDemo />,
+  "glitch-text": () => (
+    <div className="flex flex-col items-center gap-3">
+      <GlitchText className="text-4xl font-black">خطای ۴۰۴</GlitchText>
+      <GlitchText trigger="hover" className="text-sm text-muted-foreground">این یکی فقط با هاور</GlitchText>
+    </div>
+  ),
+  "image-reveal": (k) => (
+    <div key={k} className="grid w-full max-w-md grid-cols-2 gap-3">
+      <ImageReveal src="/sites/restaurant-site/courtyard.webp" alt="حیاط رستوران" className="aspect-[4/5] rounded-xl" />
+      <ImageReveal src="/sites/restaurant-site/fesenjan.webp" alt="فسنجان" from="bottom" delay={200} className="aspect-[4/5] rounded-xl">
+        <span className="absolute bottom-2 start-2 rounded-md bg-black/55 px-2 py-0.5 text-[11px] text-white backdrop-blur">فسنجان</span>
+      </ImageReveal>
+    </div>
+  ),
+  "ken-burns": () => (
+    <KenBurns
+      className="h-48 w-full max-w-md rounded-xl"
+      interval={3500}
+      images={[0, 1, 2, 4].map((i) => ({ src: LODGE[i], alt: "اقامتگاه کویری" }))}
+    >
+      <div className="flex size-full flex-col justify-end bg-gradient-to-t from-black/70 via-black/10 to-transparent p-4 pb-7 text-white">
+        <p className="text-lg font-black">یک شب در کویر</p>
+        <p className="text-xs opacity-80">اقامتگاه بومی، مصر</p>
+      </div>
+    </KenBurns>
+  ),
+  "image-trail": () => (
+    <ImageTrail className="h-48 w-full max-w-md rounded-xl border border-border bg-card" images={LODGE} size={72}>
+      <div className="grid size-full place-items-center text-center">
+        <div>
+          <p className="text-2xl font-black">نمونه‌کارها</p>
+          <p className="mt-1 text-xs text-muted-foreground">ماوس را این‌جا حرکت بدید</p>
+        </div>
+      </div>
+    </ImageTrail>
+  ),
+  "image-lens": () => (
+    <ImageLens src="/sites/restaurant-site/kebab.webp" alt="کباب" zoom={2.4} lens={110} className="aspect-square w-full max-w-[220px] rounded-xl" />
+  ),
+  "fill-button": () => (
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <FillButton>شروع همکاری</FillButton>
+      <FillButton className="border-transparent bg-muted" fillClassName="bg-brand" activeTextClassName="text-brand-foreground">نمونه‌کارها</FillButton>
+    </div>
+  ),
+  "roll-button": () => (
+    <div className="flex flex-wrap items-center justify-center gap-3">
+      <RollButton icon={<ArrowLeft />}>مشاهده‌ی پروژه‌ها</RollButton>
+      <RollButton className="bg-transparent text-foreground shadow-none ring-1 ring-border">تماس با ما</RollButton>
+    </div>
+  ),
+  "cursor-ring": () => (
+    <CursorRing className="flex h-44 w-full max-w-md flex-col items-center justify-center gap-4 rounded-xl border border-border bg-card">
+      <p className="text-xs text-muted-foreground">ماوس را این‌جا بیاورید و روی دکمه‌ها ببرید</p>
+      <div className="flex items-center gap-3">
+        <Button size="sm">دکمه</Button>
+        <a href="#" onClick={(e) => e.preventDefault()} className="text-sm underline underline-offset-4">لینک</a>
+        <div data-cursor="ببینید" className="grid size-16 place-items-center rounded-lg bg-muted text-[11px] text-muted-foreground">با متن</div>
+      </div>
+    </CursorRing>
+  ),
+  "hero-intro": (k) => (
+    <HeroIntro
+      key={k}
+      className="w-full rounded-xl border border-border bg-background py-10"
+      eyebrow={<Badge variant="outline" className="rounded-full px-3">نسخه‌ی {fa(3)} منتشر شد</Badge>}
+      title={["رابط کاربری فارسی،", "بدون دردسر راست‌چین"]}
+      description="کامپوننت‌هایی که از روز اول برای فارسی ساخته شده‌اند."
+      actions={
+        <>
+          <Button size="sm">شروع کنید</Button>
+          <Button size="sm" variant="outline">مستندات</Button>
+        </>
+      }
+    />
+  ),
+  "hero-parallax": () => <HeroParallaxDemo />,
 };
 
 export const replayable = new Set([
@@ -672,4 +810,7 @@ export const replayable = new Set([
   "radial-intro",
   "skeleton-reveal",
   "streaming-text",
+  "line-rise",
+  "image-reveal",
+  "hero-intro",
 ]);
