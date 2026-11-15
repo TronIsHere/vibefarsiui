@@ -2,6 +2,7 @@ import { Frame, HatchBand } from "@/components/landing/frame";
 import { TopBar } from "@/components/landing/top-bar";
 import { Hero } from "@/components/landing/hero";
 import { Showcase } from "@/components/landing/showcase";
+import { WhatsNew } from "@/components/landing/whats-new";
 import { Closing } from "@/components/landing/closing";
 import { Sponsors } from "@/components/landing/sponsors";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -17,6 +18,8 @@ export default function Home() {
         <JsonLd data={faqJsonLd()} />
         <Frame>
           <Hero />
+          <WhatsNew />
+          <HatchBand />
           <Showcase />
           <HatchBand />
           <Closing />

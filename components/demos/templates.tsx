@@ -29,6 +29,17 @@ import { JobsPage } from "@/registry/templates/jobs";
 import { PosPage } from "@/registry/templates/pos";
 import { CrmPage } from "@/registry/templates/crm";
 import { TeamCalendarPage } from "@/registry/templates/team-calendar";
+import { CafeMenu } from "@/registry/templates/cafe-menu";
+import { LinkInBio } from "@/registry/templates/link-in-bio";
+import { ClassifiedsPage } from "@/registry/templates/classifieds";
+import { SeatPickerPage } from "@/registry/templates/seat-picker";
+import { MessengerPage } from "@/registry/templates/messenger";
+import { PodcastPage } from "@/registry/templates/podcast";
+import { ResumePage } from "@/registry/templates/resume";
+import { CryptoExchange } from "@/registry/templates/crypto-exchange";
+import { DoctorAppointment } from "@/registry/templates/doctor-appointment";
+import { PortfolioPage } from "@/registry/templates/portfolio";
+import { EventLanding } from "@/registry/templates/event-landing";
 
 export const templateComponents: Record<string, React.ComponentType> = {
   "shop-dashboard": ShopDashboard,
@@ -62,4 +73,15 @@ export const templateComponents: Record<string, React.ComponentType> = {
   pos: PosPage,
   crm: CrmPage,
   "team-calendar": TeamCalendarPage,
+  "cafe-menu": CafeMenu,
+  "link-in-bio": LinkInBio,
+  classifieds: ClassifiedsPage,
+  "seat-picker": SeatPickerPage,
+  messenger: MessengerPage,
+  podcast: PodcastPage,
+  resume: ResumePage,
+  "crypto-exchange": CryptoExchange,
+  "doctor-appointment": DoctorAppointment,
+  portfolio: PortfolioPage,
+  "event-landing": EventLanding,
 };

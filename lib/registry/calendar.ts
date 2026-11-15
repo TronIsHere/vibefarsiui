@@ -299,6 +299,95 @@ const [events, setEvents] = useState<CalendarEvent[]>(initial)
     notes: ["ردیف پوشش پایین جدول تعداد هر شیفت در هر روز را نشون میده و صفرها قرمز میشن."],
     promptBullets: ["Semantic <table> with row and column headers; cells open a Popover menu of menuitemcheckbox shift types; warnings use an icon plus text, not color alone."],
   },
+  {
+    slug: "prayer-times",
+    name: "اوقات شرعی",
+    cat: "occasions",
+    tags: ["azan", "prayer", "city", "sunrise", "countdown"],
+    file: cal("prayer-times"),
+    deps: ["lucide-react"],
+    registryDeps: [...DEPS, "jalali", "hijri"],
+    desc: "اذان صبح و ظهر و مغرب، طلوع و غروب آفتاب و نیمه‌شب شرعی برای شهرهای ایران، با روش مؤسسه‌ی ژئوفیزیک دانشگاه تهران. همه‌چی توی مرورگر حساب میشه، نوبت بعدی پررنگه و شمارش معکوس داره.",
+    usage: `import { PrayerTimes } from "@/components/calendar/prayer-times"
+
+<PrayerTimes location="اصفهان" cities />
+
+// هر جای دیگه با مختصات:
+<PrayerTimes location={{ name: "کیش", lat: 26.53, lng: 53.98 }} variant="strip" azanOnly />`,
+    props: [
+      { name: "location", type: "string | PrayerLocation", default: '"تهران"', desc: "اسم یکی از شهرهای IRAN_CITIES یا یک مکان با name و lat و lng." },
+      { name: "cities", type: "PrayerLocation[] | boolean", desc: "اگه بدید، کاربر می‌تونه شهر را عوض کنه. true یعنی همه‌ی شهرهای آماده." },
+      { name: "date", type: "Date", desc: "روز ثابت. اگه ندید، امروزه و دکمه‌های روز قبل و بعد نشون داده میشن." },
+      { name: "variant", type: '"list" | "strip"', default: '"list"', desc: "فهرست ردیفی یا نوار کاشی‌های کوچیک." },
+      { name: "azanOnly", type: "boolean", desc: "فقط سه وقت اذان." },
+      { name: "method", type: "{ fajr, maghrib }", default: "17.7° / 4.5°", desc: "زاویه‌ی خورشید زیر افق برای اذان صبح و مغرب." },
+    ],
+    notes: [
+      "تابع prayerTimes(date, location) جدا هم صادر میشه و برای اعلان یا ویجت سرور هم به کار میاد.",
+      "دقت حدود یک دقیقه است. جدول‌های رسمی ارتفاع شهر را حساب نمی‌کنن و این‌جا هم پیش‌فرض همینه.",
+    ],
+    promptBullets: [
+      "Sun position from the Julian date (declination and equation of time), Fajr at 17.7° and Maghrib at 4.5° below the horizon, midnight halfway from sunset to the next Fajr.",
+      "Times are real instants formatted in Asia/Tehran; the next one is aria-current=\"time\" and the countdown is a polite live region.",
+    ],
+  },
+  {
+    slug: "triple-date",
+    name: "تاریخ سه‌گانه",
+    cat: "occasions",
+    tags: ["jalali", "hijri", "gregorian", "today", "date"],
+    file: cal("triple-date"),
+    deps: [],
+    registryDeps: [...DEPS, "jalali", "hijri"],
+    desc: "یک روز به شمسی و قمری و میلادی، مثل بالای تقویم‌های رومیزی و روزنامه‌ها. روز شمسی درشت، دو تاریخ دیگه کنارش و مناسبت‌های همون روز زیرش. قمری از جدول رسمی رؤیت هلال میاد.",
+    usage: `import { TripleDate } from "@/components/calendar/triple-date"
+
+<TripleDate navigable />
+
+// یک خط برای سربرگ سایت:
+<TripleDate variant="inline" latinGregorian />`,
+    props: [
+      { name: "date", type: "Date", default: "امروز", desc: "روزی که نشون داده میشه." },
+      { name: "variant", type: '"card" | "inline"', default: '"card"', desc: "کارت با روز درشت یا یک خط کوتاه." },
+      { name: "navigable", type: "boolean", desc: "دکمه‌های روز قبل و بعد." },
+      { name: "latinGregorian", type: "boolean", desc: "میلادی به انگلیسی و با رقم لاتین، مثل اسناد." },
+      { name: "occasions", type: "boolean", default: "true", desc: "مناسبت‌ها و تعطیلی همون روز." },
+    ],
+    notes: ["بیرون از جدول رسمی، تاریخ قمری با برچسب «تقریبی» میاد چون ممکنه یک روز جابه‌جا باشه.", "تابع tripleDate(date) هر سه تاریخ را با اسم ماه و روز هفته برمی‌گردونه."],
+    promptBullets: ["Holidays and Fridays tint the Jalali block red with a text label for screen readers; the Latin Gregorian date sits in <bdi dir=\"ltr\">."],
+  },
+  {
+    slug: "resource-timeline",
+    name: "تایم‌لاین منابع",
+    cat: "planning",
+    tags: ["resources", "rooms", "booking", "timeline", "load"],
+    file: cal("resource-timeline"),
+    wide: true,
+    deps: ["lucide-react"],
+    registryDeps: DEPS,
+    desc: "یک روز برای چند اتاق، نفر یا ماشین. منابع سمت راست، ساعت‌ها از راست به چپ، رزروها به شکل نوار و هم‌پوشانی‌ها در ردیف‌های جدا. زمان خالی کلیک‌پذیره، خط الان داره و میزان پر بودن هر منبع زیر اسمش میاد.",
+    usage: `import { ResourceTimeline } from "@/components/calendar/resource-timeline"
+
+<ResourceTimeline
+  resources={[{ id: "a", title: "اتاق جلسه‌ی ۱" }, { id: "b", title: "اتاق جلسه‌ی ۲" }]}
+  events={bookings}
+  onSlotClick={(resourceId, start, end) => openBooking({ resourceId, start, end })}
+  onEventClick={(e) => openDetails(e.id)}
+/>`,
+    props: [
+      { name: "resources", type: "Resource[]", desc: "هر منبع یک ردیف با id و title و avatar اختیاری." },
+      { name: "events", type: "CalendarEvent[]", desc: "رزروها با resourceId. رزروهای روزهای دیگه نادیده گرفته میشن." },
+      { name: "date / defaultDate / onDateChange", type: "Date", default: "امروز", desc: "روزی که نشون داده میشه." },
+      { name: "startHour / endHour", type: "number", default: "8 / 20", desc: "ساعت‌های قابل دیدن." },
+      { name: "onSlotClick", type: "(resourceId, start, end) => void", desc: "زمان خالی را دکمه می‌کنه، هر slotMinutes یک خونه." },
+      { name: "hourWidth / resourceWidth", type: "number", default: "88 / 180", desc: "عرض هر ساعت و ستون منابع." },
+    ],
+    notes: ["با کیبورد، دکمه‌ی + کنار هر منبع اولین زمان آزاد را رزرو می‌کنه و هر رزرو یک دکمه با برچسب کامله."],
+    promptBullets: [
+      "Bars placed with inset-inline-start in minutes × hourWidth so time flows right to left without mirroring math; overlaps stack into lanes with a greedy pass.",
+      "Each resource row is role=group labeled with its booked time; the hour grid behind the bars is mouse-only and aria-hidden.",
+    ],
+  },
 ];
 
 export const calendar = list;

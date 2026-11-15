@@ -89,6 +89,7 @@ import { IbanInput } from "@/registry/ui/iban-input";
 import { PhoneInput } from "@/registry/ui/phone-input";
 import { NationalIdInput } from "@/registry/ui/national-id-input";
 import { CardNumberInput } from "@/registry/ui/card-number-input";
+import { BankCard, CardToCard } from "@/registry/ui/card-to-card";
 import { PlateInput } from "@/registry/ui/plate-input";
 import { AddressPicker, type AddressValue } from "@/registry/ui/address-picker";
 import { PostalCodeInput } from "@/registry/ui/postal-code-input";
@@ -110,6 +111,9 @@ import { Collapsible } from "@/registry/ui/collapsible";
 import { ScrollArea } from "@/registry/ui/scroll-area";
 import { Countdown } from "@/registry/ui/countdown";
 import { educationCardDemos, educationDemos } from "./education";
+import { aiCardDemos, aiDemos } from "./components-ai";
+import { persianCardDemos, persianDemos } from "./components-persian";
+import { generalCardDemos, generalDemos } from "./components-general";
 import { AlignCenter, AlignLeft, AlignRight, Bold, Italic, LayoutGrid, List, Underline } from "lucide-react";
 
 type Order = {
@@ -256,6 +260,78 @@ const loadCities = (q: string, signal: AbortSignal) =>
     },
   );
 const NOW = Date.now();
+/* Luhn-valid sample cards and mod-97-valid IBANs, built from each bank's BIN and IBAN code. */
+const DEMO_BANKS: [string, string, string][] = [
+  ["ملت", "610433", "012"], ["ملی", "603799", "017"], ["تجارت", "627353", "018"], ["پاسارگاد", "502229", "057"],
+  ["شهر", "502806", "061"], ["رسالت", "504172", "070"], ["رفاه کارگران", "589463", "013"], ["ایران زمین", "505785", "069"],
+  ["توسعه تعاون", "502908", "022"], ["توسعه صادرات", "627648", "020"], ["صنعت و معدن", "627961", "011"], ["خاورمیانه", "585947", "078"],
+  ["سامان", "621986", "056"], ["سپه", "589210", "015"], ["صادرات", "603769", "019"], ["پارسیان", "622106", "054"],
+];
+
+function demoCard(bin: string) {
+  const body = bin + "791234567";
+  for (let c = 0; c < 10; c++) {
+    const d = body + c;
+    let sum = 0;
+    for (let i = 0; i < 16; i++) {
+      let n = Number(d[i]);
+      if (i % 2 === 0) { n *= 2; if (n > 9) n -= 9; }
+      sum += n;
+    }
+    if (sum % 10 === 0) return d;
+  }
+  return body + "0";
+}
+
+function demoIban(code: string) {
+  const bban = code + "0000000001234567890";
+  let rem = 0;
+  for (const ch of bban + "182700") rem = (rem * 10 + Number(ch)) % 97;
+  return "IR" + String(98 - rem).padStart(2, "0") + bban;
+}
+
+function CardToCardDemo() {
+  const [pick, setPick] = React.useState(0);
+  const [, bin, code] = DEMO_BANKS[pick];
+  return (
+    <div className="flex w-full flex-col items-center gap-5">
+      <CardToCard number={demoCard(bin)} holder="سارا محمدی" expiry="1408/05" sheba={demoIban(code)} amount={480000} />
+      <div className="flex w-full max-w-sm gap-1.5 overflow-x-auto pb-1 [scrollbar-width:thin]" role="group" aria-label="بانک نمونه">
+        {DEMO_BANKS.map(([label], i) => (
+          <button
+            key={label}
+            type="button"
+            onClick={() => setPick(i)}
+            aria-pressed={i === pick}
+            className={
+              "shrink-0 rounded-full border px-2.5 py-1 text-xs transition-colors " +
+              (i === pick ? "border-foreground bg-foreground text-background" : "border-border text-muted-foreground hover:text-foreground")
+            }
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BankCardStack() {
+  return (
+    <div className="relative h-36 w-56">
+      {DEMO_BANKS.slice(0, 3).map(([label, bin], i) => (
+        <div
+          key={label}
+          className="absolute inset-x-0 top-0 transition-transform"
+          style={{ transform: `translate(${(i - 1) * -18}px, ${i * 14}px) rotate(${(i - 1) * -6}deg)`, zIndex: i }}
+        >
+          <BankCard number={demoCard(bin)} holder="سارا محمدی" masked />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function InboxDemo() {
   const [items, setItems] = React.useState([
     {
@@ -1241,6 +1317,7 @@ export const componentDemos: Record<string, React.ReactNode> = {
       <CardNumberInput id="d-card" />
     </div>
   ),
+  "card-to-card": <CardToCardDemo />,
   "plate-input": <PlateInput defaultValue={{ left: "12", letter: "ب", middle: "345", region: "11" }} />,
   "address-picker": <AddressDemo />,
   "postal-code-input": (
@@ -1368,6 +1445,9 @@ export const componentDemos: Record<string, React.ReactNode> = {
     />
   ),
   ...educationDemos,
+  ...aiDemos,
+  ...persianDemos,
+  ...generalDemos,
 };
 
 /**
@@ -1719,6 +1799,7 @@ export const componentCardDemos: Record<string, React.ReactNode> = {
       <CardNumberInput />
     </div>
   ),
+  "card-to-card": <BankCardStack />,
   "address-picker": (
     <div className="w-full">
       <AddressPicker layout="stack" defaultValue={{ province: "فارس", city: "شیراز" }} />
@@ -1770,4 +1851,7 @@ export const componentCardDemos: Record<string, React.ReactNode> = {
     />
   ),
   ...educationCardDemos,
+  ...aiCardDemos,
+  ...persianCardDemos,
+  ...generalCardDemos,
 };

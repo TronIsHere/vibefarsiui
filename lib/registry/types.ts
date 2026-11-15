@@ -17,11 +17,13 @@ export type DocBase = {
   promptBullets: string[];
   /** Extra CSS (keyframes/utilities) that must be added to globals.css. */
   css?: string;
-  /** Two columns wide on the landing grid. */
-  wide?: boolean;
+  /** Two columns wide on the landing grid; "full" takes the whole row in the components catalog. */
+  wide?: boolean | "full";
+  /** The full demo is page-sized (a whole lesson, say), so the /components index shows the small card demo instead. */
+  compactCard?: boolean;
 };
 
-export type ComponentCat = "form" | "display" | "feedback" | "nav" | "overlay" | "data" | "education";
+export type ComponentCat = "form" | "display" | "feedback" | "nav" | "overlay" | "data" | "education" | "ai";
 export type ComponentDoc = DocBase & { cat: ComponentCat };
 export type AnimationDoc = DocBase;
 export type BackgroundDoc = DocBase & {

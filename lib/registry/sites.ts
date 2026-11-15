@@ -151,7 +151,7 @@ export const sites: SiteDoc[] = [
       page("book", "رزرو", "BookPage", "رزرو · اقامتگاه کاهگل"),
       page("about", "درباره‌ی ما", "AboutPage", "درباره‌ی ما · اقامتگاه کاهگل"),
     ],
-    registryDeps: ["avatar", "reveal", "button", "date-range-picker", "number-field", "radio-group", "checkbox", "phone-input", "input", "success-check", "accordion", "rating", "counter", "sheet"],
+    registryDeps: ["avatar", "reveal", "button", "date-range-picker", "number-field", "radio-group", "checkbox-group", "phone-input", "input", "success-check", "accordion", "rating", "counter", "sheet"],
     usage: "",
     promptBullets: [
       "Five routes sharing one Shell with a transparent header over a full-bleed night photo of the lodge and a solid header elsewhere.",

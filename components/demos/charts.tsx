@@ -22,6 +22,7 @@ import { Legend, CHART_COLORS } from "@/registry/charts/chart-core";
 import { compactFa, dayKey, percentFa } from "@/lib/chart-utils";
 import { JALALI_WEEKDAYS } from "@/lib/jalali";
 import { faNumber } from "@/lib/utils";
+import { extraChartCardDemos, extraChartDemos } from "./charts-extra";
 
 /* ---------- sample data (seeded, so server and client agree) ---------- */
 
@@ -390,6 +391,7 @@ export const chartDemos: Record<string, React.ReactNode> = {
       </div>
     </div>
   ),
+  ...extraChartDemos,
 };
 
 /** Compact versions for the section grid: short, no axes chrome where it hurts. */
@@ -420,4 +422,5 @@ export const chartCardDemos: Record<string, React.ReactNode> = {
       <SparkBar label="سفارش" data={[8, 12, 5, 14, 9, 16, 11, 13, 7, 15, 10, 12]} height={36} />
     </div>
   ),
+  ...extraChartCardDemos,
 };

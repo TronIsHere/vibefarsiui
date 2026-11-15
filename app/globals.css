@@ -926,6 +926,43 @@
 @keyframes banner-in {
   from { opacity: 0; filter: blur(2px); transform: translateY(16px) scale(0.96); }
 }
+@keyframes line-rise {
+  from { transform: translateY(110%); }
+  to { transform: translateY(0); }
+}
+@keyframes glitch-a {
+  0%, 10%, 30%, 62%, 70%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0, 0); }
+  2% { clip-path: inset(12% 0 62% 0); transform: translate(-3px, -1px); }
+  5% { clip-path: inset(58% 0 18% 0); transform: translate(3px, 1px); }
+  8% { clip-path: inset(32% 0 44% 0); transform: translate(-2px, 0); }
+  64% { clip-path: inset(70% 0 6% 0); transform: translate(4px, 0); }
+  67% { clip-path: inset(4% 0 78% 0); transform: translate(-3px, 0); }
+}
+@keyframes glitch-b {
+  0%, 14%, 40%, 82%, 90%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0, 0); }
+  3% { clip-path: inset(66% 0 10% 0); transform: translate(3px, 1px); }
+  7% { clip-path: inset(20% 0 55% 0); transform: translate(-4px, 0); }
+  11% { clip-path: inset(45% 0 30% 0); transform: translate(2px, -1px); }
+  84% { clip-path: inset(8% 0 70% 0); transform: translate(-3px, 0); }
+  87% { clip-path: inset(50% 0 25% 0); transform: translate(3px, 0); }
+}
+@keyframes image-wipe {
+  from { clip-path: var(--wipe, inset(0 0 0 100%)); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes image-settle {
+  from { transform: scale(1.25); }
+  to { transform: scale(1); }
+}
+@keyframes ken-burns {
+  from { transform: scale(1.04) translate(0, 0); }
+  to { transform: scale(1.2) translate(var(--kx, 0), var(--ky, 0)); }
+}
+@keyframes trail-pop {
+  0% { opacity: 0; transform: scale(0.6) rotate(0deg); }
+  18% { opacity: 1; transform: scale(1) rotate(var(--tilt, 0deg)); }
+  100% { opacity: 0; transform: scale(0.85) translateY(18px) rotate(var(--tilt, 0deg)); }
+}
 
 /* Landing hero: live components fly out from the headline, then drift. */
 @keyframes hero-fly {
